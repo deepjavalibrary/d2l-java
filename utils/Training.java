@@ -4,9 +4,12 @@ import ai.djl.training.EasyTrain;
 import ai.djl.training.Trainer;
 import ai.djl.training.dataset.ArrayDataset;
 
+import java.io.IOException;
 import java.util.Map;
 import ai.djl.ndarray.types.DataType;
 import ai.djl.training.dataset.Batch;
+import ai.djl.translate.TranslateException;
+
 import java.util.function.UnaryOperator;
 import java.util.function.BinaryOperator;
 
@@ -45,7 +48,7 @@ class Training {
     }
 
     public static void trainingChapter6(ArrayDataset trainIter, ArrayDataset testIter,
-                                        int numEpochs, Trainer trainer, Map<String, double[]> evaluatorMetrics, double avgTrainTimePerEpoch) {
+                                        int numEpochs, Trainer trainer, Map<String, double[]> evaluatorMetrics, double avgTrainTimePerEpoch) throws IOException, TranslateException {
 
         trainer.setMetrics(new Metrics());
 
@@ -63,7 +66,7 @@ class Training {
 
         avgTrainTimePerEpoch = metrics.mean("epoch");
     }
-    
+
     /* Softmax-regression-scratch */
     public static float evaluateAccuracy(UnaryOperator<NDArray> net, Iterable<Batch> dataIterator) {
         Accumulator metric = new Accumulator(2);  // numCorrectedExamples, numExamples
