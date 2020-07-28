@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 /**
  * Sums a list of numbers over time.
  *
