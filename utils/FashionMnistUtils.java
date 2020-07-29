@@ -10,16 +10,17 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Component;
+import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.BoxLayout;
 
-class FashionMnistUtils {
+public class FashionMnistUtils {
 
-    public static RandomAccessDataset getDataset(Dataset.Usage usage,
-                                                 int batchSize,
-                                                 boolean randomShuffle) throws IOException, TranslateException {
+    public static ArrayDataset getDataset(Dataset.Usage usage,
+                                          int batchSize,
+                                          boolean randomShuffle) throws IOException, TranslateException {
         FashionMnist fashionMnist = FashionMnist.builder().optUsage(usage)
                 .setSampling(batchSize, randomShuffle)
                 .build();
@@ -83,7 +84,7 @@ class FashionMnistUtils {
         }
     }
 
-    public static void showImages(RandomAccessDataset dataset,
+    public static void showImages(ArrayDataset dataset,
                                   int number, int WIDTH, int HEIGHT, int SCALE,
                                   NDManager manager)
             throws IOException, TranslateException {
@@ -112,7 +113,7 @@ class FashionMnistUtils {
         frame.setVisible(true);
     }
 
-    public static void showImages(RandomAccessDataset dataset, int[] predLabels,
+    public static void showImages(ArrayDataset dataset, int[] predLabels,
                                   int WIDTH, int HEIGHT, int SCALE,
                                   NDManager manager)
             throws IOException, TranslateException {
@@ -141,4 +142,5 @@ class FashionMnistUtils {
         frame.setVisible(true);
     }
 }
+
 
