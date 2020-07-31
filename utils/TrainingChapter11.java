@@ -57,7 +57,7 @@ public class TrainingChapter11 {
     }
 
     /**
-     * Gets the airfoil dataset 
+     * Gets the airfoil dataset
      */
     public static AirfoilRandomAccess getDataCh11(int batchSize, int n)
             throws IOException, TranslateException {
@@ -77,7 +77,7 @@ public class TrainingChapter11 {
         airfoil.whitenAll();
         return airfoil;
     }
-    
+
     /**
      *  Evaluate the loss of a model on the given dataset
      */
@@ -105,11 +105,11 @@ public class TrainingChapter11 {
         display(LinePlot.create("loss vs. epoch", data, "epoch", "loss"));
     }
 
-    public static LossTime trainCh11(TrainerConsumer trainer, 
-                                     NDList states, Map<String, 
-                                     Float> hyperparams,
+    public static LossTime trainCh11(TrainerConsumer trainer,
+                                     NDList states, Map<String,
+            Float> hyperparams,
                                      AirfoilRandomAccess dataset,
-                                     int featureDim, int numEpochs) {
+                                     int featureDim, int numEpochs) throws IOException, TranslateException {
         NDManager manager = NDManager.newBaseManager();
         NDArray w = manager.randomNormal(0, 0.01f, new Shape(featureDim, 1), DataType.FLOAT32);
         NDArray b = manager.zeros(new Shape(1));
@@ -160,7 +160,7 @@ public class TrainingChapter11 {
     }
 
     public static void trainConciseCh11(Optimizer sgd, AirfoilRandomAccess dataset,
-                                        int numEpochs) {
+                                        int numEpochs) throws IOException, TranslateException {
         // Initialization
         NDManager manager = NDManager.newBaseManager();
 
