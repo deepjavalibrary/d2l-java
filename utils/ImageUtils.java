@@ -67,7 +67,11 @@ public class ImageUtils {
     }
 
     public static void drawBBoxes(Image img, NDArray boxes, String[] labels) {
-        System.out.println(boxes.getShape());
+        if (labels == null) {
+            labels = new String[(int) boxes.size(0)];
+            Arrays.fill(labels, "");
+        }
+        
         List<String> classNames = new ArrayList();
         List<Double> prob = new ArrayList();
         List<BoundingBox> boundBoxes = new ArrayList();
