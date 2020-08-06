@@ -3,6 +3,12 @@
 # build_env.sh
 # configure build environments
 
+# install conda
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
+sudo bash Miniconda3-latest-Linux-x86.sh -b
+export PATH=$HOME/miniconda3/bin:$PATH
+conda init
+
 # build tool
 pip install git+https://git-codecommit.us-east-1.amazonaws.com/v1/repos/d2l-book
 
