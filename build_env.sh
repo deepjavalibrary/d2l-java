@@ -4,12 +4,10 @@
 # configure build environments
 
 # build tool
-pip install git+https://github.com/roywei/d2l-book.git@d2l-java
+pip install git+https://git-codecommit.us-east-1.amazonaws.com/v1/repos/d2l-book
 
 # build pdf requirements
-sudo apt-get install -y texlive-full
-sudo apt-get install -y librsvg2-bin
-sudo apt-get install -y pandoc
+sudo apt-get install -y texlive-full librsvg2-bin pandoc
 
 # install fonts
 wget https://raw.githubusercontent.com/d2l-ai/utils/master/install_fonts.sh
