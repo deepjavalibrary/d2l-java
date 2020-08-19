@@ -28,6 +28,7 @@ chapter_deep-learning-computation/index
 chapter_convolutional-neural-networks/index
 chapter_convolutional-modern/index
 chapter_optimization/index
+chapter_computational-performance/index
 chapter_computer-vision/index
 
 ```

@@ -45,6 +45,8 @@ rm -r -f */temp.ipynb
 
 d2lbook build rst
 cp static/frontpage/frontpage.html _build/rst/frontpage.html
+mkdir -p _build/rst/chapter_references/
+mv zreferences.rst _build/rst/chapter_references/
 d2lbook build html
 mkdir -p _build/html/_images/
 cp -r static/frontpage/_images/* _build/html/_images/
@@ -52,6 +54,9 @@ wget https://raw.githubusercontent.com/mli/mx-theme/master/mxtheme/static/sphinx
 wget https://raw.githubusercontent.com/mli/mx-theme/master/mxtheme/static/sphinx_materialdesign_theme.js.map
 mv sphinx_materialdesign_theme.css.map _build/html/
 mv sphinx_materialdesign_theme.js.map _build/html/
+
+sed -e 's/<blockquote>//g' -i _build/html/index.html
+sed -e 's/<\/blockquote>//g' -i _build/html/index.html
 
 for fn in `find _build/html/_images/ -iname '*.svg' `; do
     if [[ $fn == *'qr_'* ]] ; then # || [[ $fn == *'output_'* ]]
