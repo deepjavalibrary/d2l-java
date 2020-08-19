@@ -42,7 +42,9 @@ the advanced modeling chapters that follow rely heavily on these techniques.
 ```toc
 :maxdepth: 2
 
+model-construction
 parameters
+custom-layer
 read-write
 use-gpu
 ```
