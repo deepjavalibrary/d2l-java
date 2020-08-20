@@ -5,7 +5,11 @@
 
 set -e
 
-rm -rf _build
+if [[ $1 == clean ]]; then
+    echo "cleaning cached build"
+    rm -rf _build
+fi
+
 rm -r -f */temp.ipynb
 
 output_dir=_build/eval
@@ -27,7 +31,7 @@ function eval {
     fi
     echo "Evaluating file: $1"
     echo "saving output to: $output_dir/$1"
-    jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=600 --output temp "$1"
+    jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=3600 --output temp "$1"
     mkdir -p $output_dir/$dir
     mv "$dir/temp.ipynb" "$output_dir/$1"
 }
@@ -39,12 +43,20 @@ done
 
 rm -r -f */temp.ipynb
 
-pip3 install git+https://github.com/roywei/d2l-book.git@d2l-java
 d2lbook build rst
 cp static/frontpage/frontpage.html _build/rst/frontpage.html
+mkdir -p _build/rst/chapter_references/
+mv zreferences.rst _build/rst/chapter_references/
 d2lbook build html
 mkdir -p _build/html/_images/
 cp -r static/frontpage/_images/* _build/html/_images/
+wget https://raw.githubusercontent.com/mli/mx-theme/master/mxtheme/static/sphinx_materialdesign_theme.css.map
+wget https://raw.githubusercontent.com/mli/mx-theme/master/mxtheme/static/sphinx_materialdesign_theme.js.map
+mv sphinx_materialdesign_theme.css.map _build/html/
+mv sphinx_materialdesign_theme.js.map _build/html/
+
+sed -e 's/<blockquote>//g' -i _build/html/index.html
+sed -e 's/<\/blockquote>//g' -i _build/html/index.html
 
 for fn in `find _build/html/_images/ -iname '*.svg' `; do
     if [[ $fn == *'qr_'* ]] ; then # || [[ $fn == *'output_'* ]]
@@ -56,4 +68,3 @@ for fn in `find _build/html/_images/ -iname '*.svg' `; do
     mv tmp.svg $fn
 done
 
-d2lbook build pdf

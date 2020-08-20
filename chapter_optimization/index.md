@@ -14,5 +14,13 @@ In this chapter, we explore common deep learning optimization algorithms in dept
 optimization-intro
 convexity
 gd
+sgd
+minibatch-sgd
+momentum
+adagrad
+rmsprop
+adadelta
+adam
+lr-scheduler
 ```
 

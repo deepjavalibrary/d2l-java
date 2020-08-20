@@ -28,4 +28,5 @@ We have the following chapters implemented
 * [convolutional-neural-networks](chapter_convolutional-neural-networks/)
 * [modern-convolutional-neural-networks](chapter_convolutional-modern/)
 * [optimization algorithms](chapter_optimization/)
+* [computational performance](chapter_computational-performance/)
 * [computer vision](chapter_computer-vision/)
