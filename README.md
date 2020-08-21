@@ -30,3 +30,9 @@ We have the following chapters implemented
 * [optimization algorithms](chapter_optimization/)
 * [computational performance](chapter_computational-performance/)
 * [computer vision](chapter_computer-vision/)
+
+## About Deep Java Library
+
+[Deep Java Library (DJL)](https://djl.ai) is a Deep Learning Framework written in Java, supporting both training and inference. DJL is built on top of modern Deep Learning frameworks (TenserFlow, PyTorch, MXNet, etc). You can easily use DJL to train your model or deploy your favorite models from a variety of engines without any additional conversion. It contains a powerful ModelZoo design that allows you to manage trained models and load them in a single line. The built-in ModelZoo currently supports more than 70 pre-trained and ready to use models from GluonCV, HuggingFace, TorchHub and Keras.
+
+Follow our [GitHub](https://github.com/awslabs/djl/tree/master/docs), [demo repository](https://github.com/aws-samples/djl-demo), [Slack channel](https://join.slack.com/t/deepjavalibrary/shared_invite/zt-ar91gjkz-qbXhr1l~LFGEIEeGBibT7w) and [twitter](https://twitter.com/deepjavalibrary) for more documentation and examples of DJL!
