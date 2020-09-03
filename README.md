@@ -6,7 +6,7 @@ We have modified the book to provide implementation in Java using [Deep Java Lib
 
 All the notebook here can be downloaded and run using Java Kernel. We also compiled the book into a [website](https://d2l.djl.ai).
 
-This project is currently been developed and maintained by the [DJL community](https://github.com/awslabs/djl).
+This project is currently being developed and maintained by AWS and the [DJL community](https://github.com/awslabs/djl).
 
 ## How to run Jupyter Notebook in Java
 
