@@ -2,7 +2,7 @@
 
 This project is modified from the original [Dive Into Deep Learning](https://d2l.ai) book by Aston Zhang, Zachary C. Lipton, Mu Li, Alex J. Smola and all the community contributors. 
 GitHub of the original book: [https://github.com/d2l-ai/d2l-en](https://github.com/d2l-ai/d2l-en). 
-We have modified the book to provide implementation in Java using [Deep Java Library(DJL)](https://djl.ai).
+We have adapted the book to to use Java and the [Deep Java Library(DJL)](https://djl.ai).
 
 All the notebook here can be downloaded and run using Java Kernel. We also compiled the book into a [website](https://d2l.djl.ai).
 
