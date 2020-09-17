@@ -73,7 +73,6 @@ public class GradDescUtils {
             s1 = step[2];
             s2 = step[3];
             results.add(new Weights(x1, x2));
-            System.out.printf("epoch %d, x1 %f, x2 %f\n", i, x1, x2);
         }
         return results;
     }
@@ -82,6 +81,7 @@ public class GradDescUtils {
     /* Show the trace of 2D variables during optimization. */
     public static void showTrace2d(BiFunction<Float, Float, Float> f, ArrayList<Weights> results) {
         // TODO: add when tablesaw adds support for contour and meshgrids
+        System.out.println("Tablesaw not supporting for contour and meshgrids, will update soon");
     }
 
     public static Figure plotGammas(float[] time, float[] gammas,
