@@ -10,6 +10,10 @@ This project is currently being developed and maintained by AWS and the [DJL com
 
 ## How to run Jupyter Notebook in Java
 
+### Online
+You can run online by clicking: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/aws-samples/d2l-java/master?urlpath=lab)
+
+### Local
 Please follow the instruction [here](https://d2l.djl.ai/chapter_installation/index.html) for how to run notebook using Java kernel.
 
 
