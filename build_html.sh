@@ -36,6 +36,8 @@ function eval {
     mv "$dir/temp.ipynb" "$output_dir/$1"
 }
 
+python3 tools/add_online_runner.py
+
 for f in **/*.ipynb
 do
   eval "$f"
