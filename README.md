@@ -13,6 +13,8 @@ This project is currently being developed and maintained by AWS and the [DJL com
 ### Online
 You can run online by clicking: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/aws-samples/d2l-java/master?urlpath=lab)
 
+Or Colab: Colab: [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/aws-samples/d2l-java/blob/colab/)
+
 ### Local
 Please follow the instruction [here](https://d2l.djl.ai/chapter_installation/index.html) for how to run notebook using Java kernel.
 

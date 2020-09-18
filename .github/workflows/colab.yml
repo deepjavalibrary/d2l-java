@@ -1,0 +1,25 @@
+name: D2L book Colab branch sync
+
+on:
+  # sync weekly
+  schedule:
+    - cron:  '0 9 * * 1'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python3
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.x'
+      - name: Add colab instruction on notebooks
+        run: python3 tools/add_colab_instruction.py
+      - name: Commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "ActionBot"
+          git commit -am "Sync master"
+          git push -f origin master:colab
