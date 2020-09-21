@@ -21,12 +21,12 @@ jobs:
     runs-on: ubuntu-18.04
     strategy:
       matrix:
-        group: ["CH1_CH4_DROPOUT", "CH4_MID", "CH4_REST", "OPT_CHAP", "REST"]
+        group: ["CH1_CH4_DROPOUT", "CH4_MID", "CH4_REST", "CH11", "REST"]
     env:
       CH1_CH4_DROPOUT: "chapter_installation chapter_introduction chapter_preface chapter_preliminaries chapter_notation dropout.ipynb"
       CH4_MID: "underfit-overfit.ipynb mlp-djl.ipynb"
       CH4_REST: "mlp-scratch.ipynb backprop.ipynb environment.ipynb mlp.ipynb numerical-stability-and-init.ipynb weight-decay.ipynb"
-      OPT_CHAP: "chapter_optimization"
+      CH11: "chapter_optimization"
       REST: "chapter_convolutional-neural-networks chapter_linear-networks utils"
     steps:
       - uses: actions/checkout@v1
