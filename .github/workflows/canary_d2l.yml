@@ -1,0 +1,35 @@
+name: D2L book Notebook Canary tests
+
+on:
+  # sync weekly
+  schedule:
+    - cron:  '0 9 * * *'
+  workflow_dispatch:
+
+jobs:
+  canary-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+        - uses: actions/checkout@v1
+        - name: Set up JDK 11
+          uses: actions/setup-java@v1
+          with:
+            java-version: 11
+        - uses: actions/checkout@v2
+        - name: Set up Python3
+          uses: actions/setup-python@v2
+          with:
+            python-version: 3.7
+        - name: Install IJava kernel
+          run: |
+            pip3 install jupyter
+            git clone https://github.com/frankfliu/IJava.git
+            cd IJava
+            ./gradlew installKernel --python python
+        - name: Run canary tests
+          run: |
+            cd chapter_multilayer-perceptrons
+            jupyter nbconvert --to html --execute --ExecutePreprocessor.timeout=2000 mlp.ipynb
