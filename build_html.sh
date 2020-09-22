@@ -3,6 +3,10 @@
 # build_html.sh
 # build website based on jupyter notebooks
 
+echo "Try to fetch daily backup"
+date=$(date '+%Y-%m-%d')
+aws s3 sync s3://d2l-java-notebook/daily-backup/$date .
+
 set -e
 
 if [[ $1 == clean ]]; then
@@ -34,6 +38,7 @@ function eval {
     jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=3600 --output temp "$1"
     mkdir -p $output_dir/$dir
     mv "$dir/temp.ipynb" "$output_dir/$1"
+    aws s3 cp "$output_dir/$1" "s3://d2l-java-notebook/daily-backup/$date/$output_dir/$1"
 }
 
 python3 tools/add_online_runner.py
