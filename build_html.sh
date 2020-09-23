@@ -24,6 +24,8 @@ mkdir -p $output_dir/img
 cp -r img/* $output_dir/img
 cp d2l.bib $output_dir
 
+python3 tools/add_online_runner.py
+
 d2lbook build eval
 
 function eval {
@@ -40,8 +42,6 @@ function eval {
     mv "$dir/temp.ipynb" "$output_dir/$1"
     aws s3 cp "$output_dir/$1" "s3://d2l-java-notebook/daily-backup/$date/$output_dir/$1"
 }
-
-python3 tools/add_online_runner.py
 
 for f in **/*.ipynb
 do
