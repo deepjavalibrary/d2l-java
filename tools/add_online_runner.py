@@ -9,6 +9,6 @@ for file in Path('.').glob('**/*.ipynb'):
     with open(file, mode= "r", encoding= "utf-8") as f:
         data = json.loads(f.read())
     with open(file, 'w') as writer:
-        constructor["source"] = [binder_prefix + str(file) + ") or " + colab_prefix + ")"]
+        constructor["source"] = [binder_prefix + str(file) + ") or " + colab_prefix + str(file) + ")"]
         data["cells"].insert(0, constructor)
         writer.write(json.dumps(data))
