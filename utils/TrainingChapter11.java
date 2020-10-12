@@ -1,4 +1,5 @@
 import ai.djl.Model;
+import ai.djl.Device;
 import ai.djl.engine.Engine;
 import ai.djl.metric.Metrics;
 import ai.djl.ndarray.NDArray;
@@ -176,6 +177,7 @@ public class TrainingChapter11 {
 
         DefaultTrainingConfig config = new DefaultTrainingConfig(loss)
                 .optOptimizer(sgd)
+                .optDevices(Device.getDevices(1)) // single GPU
                 .addEvaluator(new Accuracy()) // Model Accuracy
                 .addTrainingListeners(TrainingListener.Defaults.logging()); // Logging
 
