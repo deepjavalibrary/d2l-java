@@ -3,6 +3,9 @@
 # build_html.sh
 # build website based on jupyter notebooks
 
+# ask tablesaw to plot <img> for Sphinx to load
+export D2L_PLOT_IMAGE=1
+
 echo "Try to fetch daily backup"
 date=$(date '+%Y-%m-%d')
 aws s3 sync s3://d2l-java-notebook/daily-backup/$date .
