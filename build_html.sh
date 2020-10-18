@@ -5,6 +5,7 @@
 
 # ask tablesaw to plot <img> for Sphinx to load
 # export D2L_PLOT_IMAGE=1
+export PRELOAD_PLOTLY=1
 
 echo "Try to fetch daily backup"
 date=$(date '+%Y-%m-%d')
@@ -54,7 +55,7 @@ done
 rm -r -f */temp.ipynb
 
 # download additional js to be included
-curl -O https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js
+curl -O https://cdn.plot.ly/plotly-1.57.0.min.js
 
 d2lbook build rst
 cp static/frontpage/frontpage.html _build/rst/frontpage.html
