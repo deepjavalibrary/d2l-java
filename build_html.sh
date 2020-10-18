@@ -53,6 +53,9 @@ done
 
 rm -r -f */temp.ipynb
 
+# download additional js to be included
+curl -O https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js
+
 d2lbook build rst
 cp static/frontpage/frontpage.html _build/rst/frontpage.html
 mkdir -p _build/rst/chapter_references/
