@@ -4,7 +4,7 @@
 # build website based on jupyter notebooks
 
 # ask tablesaw to plot <img> for Sphinx to load
-export D2L_PLOT_IMAGE=1
+# export D2L_PLOT_IMAGE=1
 
 echo "Try to fetch daily backup"
 date=$(date '+%Y-%m-%d')
