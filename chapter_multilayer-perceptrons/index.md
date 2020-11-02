@@ -16,7 +16,7 @@ We will also discuss issues relating to numerical stability and parameter initia
 Throughout, we focus on applying models to real data,
 aiming to give the reader a firm grasp not just of the concepts
 but also of the practice of using deep networks.
-We punt matters relating to the computational performance,
+We put matters relating to the computational performance,
 scalability and efficiency of our models to subsequent chapters.
 
 ```toc
@@ -32,4 +32,3 @@ backprop
 numerical-stability-and-init
 environment
 ```
-
