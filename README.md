@@ -1,46 +1,46 @@
-# Dive into Deep Learning (Java version)
+# 深度学习 (Java 版本 )
 
-This project is modified from the original [Dive Into Deep Learning](https://d2l.ai) book by Aston Zhang, Zachary C. Lipton, Mu Li, Alex J. Smola and all the community contributors. 
-GitHub of the original book: [https://github.com/d2l-ai/d2l-en](https://github.com/d2l-ai/d2l-en). 
-We have adapted the book to to use Java and the [Deep Java Library(DJL)](https://djl.ai).
+该项目是对原始的 [Dive Into Deep Learning ](https://d2l.ai) 一书的修改，这本书是由阿斯顿·张（Aston Zhang），扎卡里·立普顿（Zachary C. Lipton），穆力，亚历克斯·J·斯莫拉（Alex J. Smola）和所有社区贡献者撰写的。  
+原始书籍的GitHub地址: [https://github.com/d2l-ai/d2l-en](https://github.com/d2l-ai/d2l-en) 。
+我们改编了本书以使用Java和[Deep Java Library(DJL)](https://djl.ai)。
 
-All the notebook here can be downloaded and run using Java Kernel. We also compiled the book into a [website](https://d2l.djl.ai).
+这里所有笔记本均可使用Java内核下载并运行。我们还把这本书编成了一个[网站](https://d2l.djl.ai)。
 
-This project is currently being developed and maintained by AWS and the [DJL community](https://github.com/awslabs/djl).
+AWS和[DJL community](https://github.com/awslabs/djl) 目前正在开发和维护该项目。
 
-## How to run Jupyter Notebook in Java
+## 如何在Java中运行Jupyter Notebook
 
-### Online
-You can run online by clicking: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/aws-samples/d2l-java/master?urlpath=lab)
+### 线上
+您可以通过以下方式在线运行: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/aws-samples/d2l-java/master?urlpath=lab)
 
-Or Colab: [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/aws-samples/d2l-java/blob/colab/)
+或者: [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/aws-samples/d2l-java/blob/colab/)
 
-### Local
-Please follow the instruction [here](https://d2l.djl.ai/chapter_installation/index.html) for how to run notebook using Java kernel.
-
-
-## How to contribute to this book
-
-Please follow the contributor guide [here](documentation/contribute.md)
+### 本地
+请按照[此处](https://d2l.djl.ai/chapter_installation/index.html) 的说明操作，以了解如何使用Java内核运行Notebook。
 
 
-We have the following chapters implemented
-* [preface](chapter_preface/index.ipynb)
-* [installation](chapter_installation/index.ipynb)
-* [notation](chapter_notation/index.ipynb)
-* [introduction](chapter_introduction/index.ipynb)
-* [preliminaries](chapter_preliminaries/)
-* [linear-networks](chapter_linear-networks/)
-* [multilayer-perceptrons](chapter_multilayer-perceptrons/)
-* [deep learning computation](chapter_deep-learning-computation/)
-* [convolutional-neural-networks](chapter_convolutional-neural-networks/)
-* [modern-convolutional-neural-networks](chapter_convolutional-modern/)
-* [optimization algorithms](chapter_optimization/)
-* [computational performance](chapter_computational-performance/)
-* [computer vision](chapter_computer-vision/)
+## 如何为这本书做贡献
 
-## About Deep Java Library
+请在[此处](documentation/contribute.md)遵循贡献者指南
 
-[Deep Java Library (DJL)](https://djl.ai) is a Deep Learning Framework written in Java, supporting both training and inference. DJL is built on top of modern Deep Learning frameworks (TenserFlow, PyTorch, MXNet, etc). You can easily use DJL to train your model or deploy your favorite models from a variety of engines without any additional conversion. It contains a powerful ModelZoo design that allows you to manage trained models and load them in a single line. The built-in ModelZoo currently supports more than 70 pre-trained and ready to use models from GluonCV, HuggingFace, TorchHub and Keras.
 
-Follow our [GitHub](https://github.com/awslabs/djl/tree/master/docs), [demo repository](https://github.com/aws-samples/djl-demo), [Slack channel](https://join.slack.com/t/deepjavalibrary/shared_invite/zt-ar91gjkz-qbXhr1l~LFGEIEeGBibT7w) and [twitter](https://twitter.com/deepjavalibrary) for more documentation and examples of DJL!
+我们实施了以下章节
+* [前言](chapter_preface/index.ipynb)
+* [安装](chapter_installation/index.ipynb)
+* [符号](chapter_notation/index.ipynb)
+* [第一章 简介](chapter_introduction/index.ipynb)
+* [第二章 预备知识](chapter_preliminaries/)
+* [第三章 线性网络](chapter_linear-networks/)
+* [第四章 多层感知器](chapter_multilayer-perceptrons/)
+* [第五章 深度学习计算](chapter_deep-learning-computation/)
+* [第六章 卷积神经网络](chapter_convolutional-neural-networks/)
+* [第七章 现代卷积神经网络](chapter_convolutional-modern/)
+* [第八章 优化算法](chapter_optimization/)
+* [第九章 计算性能](chapter_computational-performance/)
+* [第十章 计算机视觉](chapter_computer-vision/)
+
+## 关于Deep Java Library
+
+[Deep Java Library (DJL)](https://djl.ai) 是用Java编写的深度学习框架，同时支持训练和推理。DJL建立在现代深度学习框架（TenserFlow，PyTorch，MXNet等）之上。您可以轻松地使用DJL训练模型或从各种引擎部署您喜欢的模型，而无需进行任何其他转换。它包含一个强大的ModelZoo设计，使您可以管理训练有素的模型并将其加载到一行中。内置的ModelZoo目前支持来自GluonCV，HuggingFace，TorchHub和Keras的70多种预训练并可以使用的模型。
+
+请关注我们的 [GitHub](https://github.com/awslabs/djl/tree/master/docs), [demo repository](https://github.com/aws-samples/djl-demo), [Slack channel](https://join.slack.com/t/deepjavalibrary/shared_invite/zt-ar91gjkz-qbXhr1l~LFGEIEeGBibT7w) and [twitter](https://twitter.com/deepjavalibrary) ，以获取DJL的更多文档和示例！
