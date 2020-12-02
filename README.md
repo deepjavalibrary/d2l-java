@@ -4,9 +4,9 @@
 原始书籍的GitHub地址: [https://github.com/d2l-ai/d2l-en](https://github.com/d2l-ai/d2l-en) 。
 我们改编了本书以使用Java和[Deep Java Library(DJL)](https://djl.ai)。
 
-这里所有笔记本均可使用Java内核下载并运行。我们还把这本书编成了一个[网站](https://d2l.djl.ai)。
+这里所有笔记本均可下载并使用Java运行。同时你也可以参阅我们的[网站](https://d2l.djl.ai)。
 
-AWS和[DJL community](https://github.com/awslabs/djl) 目前正在开发和维护该项目。
+[DJL community](https://github.com/awslabs/djl) -> DJL(中文)社区。
 
 ## 如何在Java中运行Jupyter Notebook
 
@@ -16,7 +16,7 @@ AWS和[DJL community](https://github.com/awslabs/djl) 目前正在开发和维�
 或者: [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/aws-samples/d2l-java/blob/colab/)
 
 ### 本地
-请按照[此处](https://d2l.djl.ai/chapter_installation/index.html) 的说明操作，以了解如何使用Java内核运行Notebook。
+请按照[此处](https://d2l.djl.ai/chapter_installation/index.html) 的说明操作，以了解如何使用Java运行Notebook。
 
 
 ## 如何为这本书做贡献
