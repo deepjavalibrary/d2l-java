@@ -50,5 +50,6 @@ further reviewing the [online appendix on mathematics](https://d2l.ai/chapter_ap
 :maxdepth: 2
 
 ndarray
+tablesaw
 ```
 
