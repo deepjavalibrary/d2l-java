@@ -52,5 +52,6 @@ further reviewing the [online appendix on mathematics](https://d2l.ai/chapter_ap
 ndarray
 tablesaw
 linear-algebra
+autograd
 ```
 
