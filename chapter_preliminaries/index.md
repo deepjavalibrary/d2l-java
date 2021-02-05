@@ -53,5 +53,6 @@ ndarray
 tablesaw
 linear-algebra
 calculus
+lookup-api
 ```
 
