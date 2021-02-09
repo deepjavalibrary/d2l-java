@@ -53,6 +53,7 @@ ndarray
 tablesaw
 linear-algebra
 calculus
+autograd
 lookup-api
 ```
 
