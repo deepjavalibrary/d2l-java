@@ -1,3 +1,7 @@
+import ai.djl.ndarray.*;
+import ai.djl.ndarray.types.*;
+import ai.djl.ndarray.index.*;
+
 public class TimeMachine {
     // Split text lines into word or character tokens.
     public static String[][] tokenize(String[] lines, String token) throws Exception {
@@ -51,7 +55,7 @@ public class TimeMachine {
     }
 
     public ArrayList<NDList>
-            seqDataIterRandom(List<Integer> corpus, int batchSize, int numSteps) {
+            seqDataIterRandom(List<Integer> corpus, int batchSize, int numSteps, NDManager manager) {
         /*Generate a minibatch of subsequences using random sampling.*/
         // Start with a random offset (inclusive of `numSteps - 1`) to partition a
         // sequence
@@ -97,7 +101,7 @@ public class TimeMachine {
         return new ArrayList<Integer>(corpus.subList(pos, pos + numSteps));
     }
 
-    public ArrayList<NDList> seqDataIterSequential(List<Integer> corpus, int batchSize, int numSteps) {
+    public ArrayList<NDList> seqDataIterSequential(List<Integer> corpus, int batchSize, int numSteps, NDManager manager) {
         /*Generate a minibatch of subsequences using sequential partitioning.*/
         // Start with a random offset to partition a sequence
         int offset = new Random().nextInt(numSteps);
