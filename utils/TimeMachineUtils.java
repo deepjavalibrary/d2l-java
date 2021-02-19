@@ -50,6 +50,80 @@ public class TimeMachine {
         return new Object[] {corpus, vocab};
     }
 
+    public ArrayList<NDList>
+            seqDataIterRandom(List<Integer> corpus, int batchSize, int numSteps) {
+        /*Generate a minibatch of subsequences using random sampling.*/
+        // Start with a random offset (inclusive of `numSteps - 1`) to partition a
+        // sequence
+        corpus = corpus.subList(new Random().nextInt(numSteps - 1), corpus.size());
+        // Subtract 1 since we need to account for labels
+        int numSubseqs = (corpus.size() - 1) / numSteps;
+        // The starting indices for subsequences of length `numSteps`
+        List<Integer> initialIndices = new ArrayList<>();
+        for (int i = 0; i < numSubseqs * numSteps; i += numSteps) {
+            initialIndices.add(i);
+        }
+        // In random sampling, the subsequences from two adjacent random
+        // minibatches during iteration are not necessarily adjacent on the
+        // original sequence
+        Collections.shuffle(initialIndices);
+
+        int numBatches = numSubseqs / batchSize; 
+            
+        ArrayList<NDList> pairs = new ArrayList<NDList>();
+        for (int i = 0; i < batchSize * numBatches; i += batchSize) {
+            // Here, `initialIndices` contains randomized starting indices for
+            // subsequences
+            List<Integer> initialIndicesPerBatch = initialIndices.subList(i, i + batchSize);
+
+            NDArray xNDArray = manager.create(new Shape(initialIndices.size(), numSteps), DataType.INT32);
+            NDArray yNDArray = manager.create(new Shape(initialIndices.size(), numSteps), DataType.INT32);
+            for (int j = 0; j < initialIndices.size(); j++) {
+                ArrayList<Integer> X = data(initialIndices.get(j), corpus, numSteps);
+                xNDArray.set(new NDIndex(j), manager.create(X.stream().mapToInt(Integer::intValue).toArray()));
+                ArrayList<Integer> Y = data(initialIndices.get(j)+1, corpus, numSteps);
+                yNDArray.set(new NDIndex(j), manager.create(Y.stream().mapToInt(Integer::intValue).toArray()));
+            }
+            NDList pair = new NDList();
+            pair.add(xNDArray);
+            pair.add(yNDArray);
+            pairs.add(pair);
+        }
+        return pairs;
+    }
+
+    ArrayList<Integer> data(int pos, List<Integer> corpus, int numSteps) {
+        // Return a sequence of length `numSteps` starting from `pos`
+        return new ArrayList<Integer>(corpus.subList(pos, pos + numSteps));
+    }
+
+    public ArrayList<NDList> seqDataIterSequential(List<Integer> corpus, int batchSize, int numSteps) {
+        /*Generate a minibatch of subsequences using sequential partitioning.*/
+        // Start with a random offset to partition a sequence
+        int offset = new Random().nextInt(numSteps);
+        int numTokens = ((corpus.size() - offset - 1) / batchSize) * batchSize;
+        
+        NDArray Xs = manager.create(
+            corpus.subList(offset, offset + numTokens).stream().mapToInt(Integer::intValue).toArray());
+        NDArray Ys = manager.create(
+            corpus.subList(offset + 1, offset + 1 + numTokens).stream().mapToInt(Integer::intValue).toArray());
+        Xs = Xs.reshape(new Shape(batchSize, -1));
+        Ys = Ys.reshape(new Shape(batchSize, -1));
+        int numBatches = (int) Xs.getShape().get(1) / numSteps;
+        
+        
+        ArrayList<NDList> pairs = new ArrayList<NDList>();
+        for (int i = 0; i < numSteps * numBatches; i += numSteps) {
+            NDArray X = Xs.get(new NDIndex(":, {}:{}", i, i + numSteps));
+            NDArray Y = Ys.get(new NDIndex(":, {}:{}", i, i + numSteps));
+            NDList pair = new NDList();
+            pair.add(X);
+            pair.add(Y);
+            pairs.add(pair);
+        }
+        return pairs;
+    }
+
 }
 
 public class Vocab {
@@ -108,6 +182,35 @@ public class Vocab {
     
 }
 
+public class SeqDataLoader implements Iterable<NDList> {
+    public ArrayList<NDList> dataIter;
+    public List<Integer> corpus;
+    public Vocab vocab;
+    public int batchSize;
+    public int numSteps;
+    
+    @SuppressWarnings("unchecked")
+    /* An iterator to load sequence data. */
+    public SeqDataLoader(int batchSize, int numSteps, boolean useRandomIter, int maxTokens) throws IOException, Exception {
+        Object[] corpusVocabPair = TimeMachine.loadCorpusTimeMachine(maxTokens);
+        this.corpus = (List<Integer>) corpusVocabPair[0];
+        this.vocab = (Vocab) corpusVocabPair[1];
+        
+        this.batchSize = batchSize;
+        this.numSteps = numSteps;
+        if (useRandomIter) {
+            dataIter = seqDataIterRandom(corpus, batchSize, numSteps);
+        }else {
+            dataIter = seqDataIterSequential(corpus, batchSize, numSteps);
+        }
+    }
+    
+    @Override
+    public Iterator<NDList> iterator() {
+        return dataIter.iterator();
+    }
+}
+
 public HashMap<String, Integer> countCorpus(String[] tokens) {
     /* Count token frequencies. */
     HashMap<String, Integer> counter = new HashMap<>();
@@ -130,4 +233,10 @@ public HashMap<String, Integer> countCorpus2D(String[][] tokens) {
         }
     }
     return countCorpus(allTokens.toArray(new String[0]));
+}
+
+public Object[] loadDataTimeMachine(int batchSize, int numSteps, boolean useRandomIter, int maxTokens) throws IOException, Exception {
+    /* Return the iterator and the vocabulary of the time machine dataset. */
+    SeqDataLoader dataIter = new SeqDataLoader(batchSize, numSteps, useRandomIter, maxTokens);
+    return new Object[] {dataIter, dataIter.vocab}; // ArrayList<NDList>, Vocab
 }
