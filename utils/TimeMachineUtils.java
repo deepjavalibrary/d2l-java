@@ -1,59 +1,7 @@
 import ai.djl.ndarray.*;
 import ai.djl.ndarray.types.*;
 import ai.djl.ndarray.index.*;
-
-public class TimeMachine {
-    // Split text lines into word or character tokens.
-    public static String[][] tokenize(String[] lines, String token) throws Exception {
-        String[][] output = new String[lines.length][];
-        if (token == "word") {
-            for (int i = 0; i < output.length; i++) {
-                output[i] = lines[i].split(" ");
-            }
-        }else if (token == "char") {
-            for (int i = 0; i < output.length; i++) {
-                output[i] = lines[i].split("");
-            }
-        }else {
-            throw new Exception("ERROR: unknown token type: " + token);
-        }
-        return output; 
-    }
-
-    // Read `The Time Machine` dataset and return an array of the lines
-    public static String[] readTimeMachine() throws IOException {
-        URL url = new URL("http://d2l-data.s3-accelerate.amazonaws.com/timemachine.txt");
-        BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-        Object[] linesObjects = in.lines().toArray();
-
-        String[] lines = new String[linesObjects.length];
-        for (int i = 0; i < linesObjects.length; i++) {
-            lines[i] = ((String) linesObjects[i]).replaceAll("[^A-Za-z]+", " ").strip().toLowerCase();
-        }
-        return lines;
-    }
-
-    public static Object[] loadCorpusTimeMachine(int maxTokens) throws IOException, Exception {
-        /* Return token indices and the vocabulary of the time machine dataset. */
-        String[] lines = readTimeMachine();
-        String[][] tokens = tokenize(lines, "char");
-        Vocab vocab = new Vocab(tokens, 0, new String[0]);
-        // Since each text line in the time machine dataset is not necessarily a
-        // sentence or a paragraph, flatten all the text lines into a single list
-        List<Integer> corpus = new ArrayList<>();
-        for (int i = 0; i < tokens.length; i++) {
-            for (int j = 0; j < tokens[i].length; j++) {
-                if (tokens[i][j] != "") {
-                    corpus.add(vocab.getIdx(tokens[i][j]));
-                }
-            }
-        }
-        if (maxTokens > 0) {
-            corpus = corpus.subList(0, maxTokens);
-        }
-        return new Object[] {corpus, vocab};
-    }
-}
+import ai.djl.util.Pair;
 
 public class Vocab {
     public int unk;
@@ -107,8 +55,60 @@ public class Vocab {
     public Integer getIdx(String token) {
         return this.tokenToIdx.getOrDefault(token, this.unk);
     }
-    
-    
+}
+
+public class TimeMachine {
+    // Split text lines into word or character tokens.
+    public static String[][] tokenize(String[] lines, String token) throws Exception {
+        String[][] output = new String[lines.length][];
+        if (token == "word") {
+            for (int i = 0; i < output.length; i++) {
+                output[i] = lines[i].split(" ");
+            }
+        }else if (token == "char") {
+            for (int i = 0; i < output.length; i++) {
+                output[i] = lines[i].split("");
+            }
+        }else {
+            throw new Exception("ERROR: unknown token type: " + token);
+        }
+        return output; 
+    }
+
+    // Read `The Time Machine` dataset and return an array of the lines
+    public static String[] readTimeMachine() throws IOException {
+        URL url = new URL("http://d2l-data.s3-accelerate.amazonaws.com/timemachine.txt");
+        String[] lines;
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()))) {
+            lines = in.lines().toArray(String[]::new);
+        }
+
+        for (int i = 0; i < lines.length; i++) {
+            lines[i] = lines[i].replaceAll("[^A-Za-z]+", " ").strip().toLowerCase();
+        }
+        return lines;
+    }
+
+    public static Pair<List<Integer>, Vocab> loadCorpusTimeMachine(int maxTokens) throws IOException, Exception {
+        /* Return token indices and the vocabulary of the time machine dataset. */
+        String[] lines = readTimeMachine();
+        String[][] tokens = tokenize(lines, "char");
+        Vocab vocab = new Vocab(tokens, 0, new String[0]);
+        // Since each text line in the time machine dataset is not necessarily a
+        // sentence or a paragraph, flatten all the text lines into a single list
+        List<Integer> corpus = new ArrayList<>();
+        for (int i = 0; i < tokens.length; i++) {
+            for (int j = 0; j < tokens[i].length; j++) {
+                if (tokens[i][j] != "") {
+                    corpus.add(vocab.getIdx(tokens[i][j]));
+                }
+            }
+        }
+        if (maxTokens > 0) {
+            corpus = corpus.subList(0, maxTokens);
+        }
+        return new Pair(corpus, vocab);
+    }
 }
 
 public class SeqDataLoader implements Iterable<NDList> {
@@ -121,16 +121,16 @@ public class SeqDataLoader implements Iterable<NDList> {
     @SuppressWarnings("unchecked")
     /* An iterator to load sequence data. */
     public SeqDataLoader(int batchSize, int numSteps, boolean useRandomIter, int maxTokens) throws IOException, Exception {
-        Object[] corpusVocabPair = TimeMachine.loadCorpusTimeMachine(maxTokens);
-        this.corpus = (List<Integer>) corpusVocabPair[0];
-        this.vocab = (Vocab) corpusVocabPair[1];
+        Pair<List<Integer>, Vocab> corpusVocabPair = TimeMachine.loadCorpusTimeMachine(maxTokens);
+        this.corpus = corpusVocabPair.getKey();
+        this.vocab = corpusVocabPair.getValue();
         
         this.batchSize = batchSize;
         this.numSteps = numSteps;
         if (useRandomIter) {
-            dataIter = seqDataIterRandom(corpus, batchSize, numSteps);
+            dataIter = seqDataIterRandom(corpus, batchSize, numSteps, manager);
         }else {
-            dataIter = seqDataIterSequential(corpus, batchSize, numSteps);
+            dataIter = seqDataIterSequential(corpus, batchSize, numSteps, manager);
         }
     }
     
@@ -164,10 +164,10 @@ public HashMap<String, Integer> countCorpus2D(String[][] tokens) {
     return countCorpus(allTokens.toArray(new String[0]));
 }
 
-public Object[] loadDataTimeMachine(int batchSize, int numSteps, boolean useRandomIter, int maxTokens) throws IOException, Exception {
+public Pair<SeqDataLoader, Vocab> loadDataTimeMachine(int batchSize, int numSteps, boolean useRandomIter, int maxTokens) throws IOException, Exception {
     /* Return the iterator and the vocabulary of the time machine dataset. */
     SeqDataLoader dataIter = new SeqDataLoader(batchSize, numSteps, useRandomIter, maxTokens);
-    return new Object[] {dataIter, dataIter.vocab}; // ArrayList<NDList>, Vocab
+    return new Pair(dataIter, dataIter.vocab); // ArrayList<NDList>, Vocab
 }
 
 
