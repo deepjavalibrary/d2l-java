@@ -3,6 +3,10 @@ import ai.djl.ndarray.types.*;
 import ai.djl.ndarray.index.*;
 import ai.djl.util.Pair;
 
+import java.io.*;
+import java.net.URL;
+import java.util.*;
+
 public class Vocab {
     public int unk;
     public List<Map.Entry<String, Integer>> tokenFreqs;
@@ -12,7 +16,7 @@ public class Vocab {
     public Vocab(String[][] tokens, int minFreq, String[] reservedTokens) {
         // Sort according to frequencies
         HashMap<String, Integer> counter = countCorpus2D(tokens);
-        this.tokenFreqs = new LinkedList<Map.Entry<String, Integer>>(counter.entrySet()); 
+        this.tokenFreqs = new ArrayList<Map.Entry<String, Integer>>(counter.entrySet()); 
         Collections.sort(tokenFreqs, 
             new Comparator<Map.Entry<String, Integer>>() { 
                 public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) { 
@@ -55,6 +59,32 @@ public class Vocab {
     public Integer getIdx(String token) {
         return this.tokenToIdx.getOrDefault(token, this.unk);
     }
+    
+    
+}
+
+public HashMap<String, Integer> countCorpus(String[] tokens) {
+    /* Count token frequencies. */
+    HashMap<String, Integer> counter = new HashMap<>();
+    if (tokens.length != 0) {
+        for (String token : tokens) {
+            counter.put(token, counter.getOrDefault(token, 0)+1);
+        }
+    }
+    return counter;
+}
+
+public HashMap<String, Integer> countCorpus2D(String[][] tokens) {
+    /* Flatten a list of token lists into a list of tokens */
+    List<String> allTokens = new ArrayList<String>();
+    for (int i = 0; i < tokens.length; i++) {
+        for (int j = 0; j < tokens[i].length; j++) {
+             if (tokens[i][j] != "") {
+                allTokens.add(tokens[i][j]);
+             }
+        }
+    }
+    return countCorpus(allTokens.toArray(new String[0]));
 }
 
 public class TimeMachine {
@@ -140,34 +170,10 @@ public class SeqDataLoader implements Iterable<NDList> {
     }
 }
 
-public HashMap<String, Integer> countCorpus(String[] tokens) {
-    /* Count token frequencies. */
-    HashMap<String, Integer> counter = new HashMap<>();
-    if (tokens.length != 0) {
-        for (String token : tokens) {
-            counter.put(token, counter.getOrDefault(token, 0)+1);
-        }
-    }
-    return counter;
-}
-
-public HashMap<String, Integer> countCorpus2D(String[][] tokens) {
-    /* Flatten a list of token lists into a list of tokens */
-    List<String> allTokens = new ArrayList<String>();
-    for (int i = 0; i < tokens.length; i++) {
-        for (int j = 0; j < tokens[i].length; j++) {
-             if (tokens[i][j] != "") {
-                allTokens.add(tokens[i][j]);
-             }
-        }
-    }
-    return countCorpus(allTokens.toArray(new String[0]));
-}
-
-public Pair<SeqDataLoader, Vocab> loadDataTimeMachine(int batchSize, int numSteps, boolean useRandomIter, int maxTokens) throws IOException, Exception {
+public Pair<ArrayList<NDList>, Vocab> loadDataTimeMachine(int batchSize, int numSteps, boolean useRandomIter, int maxTokens) throws IOException, Exception {
     /* Return the iterator and the vocabulary of the time machine dataset. */
-    SeqDataLoader dataIter = new SeqDataLoader(batchSize, numSteps, useRandomIter, maxTokens);
-    return new Pair(dataIter, dataIter.vocab); // ArrayList<NDList>, Vocab
+    SeqDataLoader seqData = new SeqDataLoader(batchSize, numSteps, useRandomIter, maxTokens);
+    return new Pair(seqData.dataIter, seqData.vocab); // ArrayList<NDList>, Vocab
 }
 
 
