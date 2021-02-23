@@ -63,8 +63,11 @@ public class Vocab {
     
 }
 
+/** 
+ * Count token frequencies.
+ */
 public HashMap<String, Integer> countCorpus(String[] tokens) {
-    /* Count token frequencies. */
+    
     HashMap<String, Integer> counter = new HashMap<>();
     if (tokens.length != 0) {
         for (String token : tokens) {
@@ -74,8 +77,10 @@ public HashMap<String, Integer> countCorpus(String[] tokens) {
     return counter;
 }
 
+/**
+ * Flatten a list of token lists into a list of tokens
+ */
 public HashMap<String, Integer> countCorpus2D(String[][] tokens) {
-    /* Flatten a list of token lists into a list of tokens */
     List<String> allTokens = new ArrayList<String>();
     for (int i = 0; i < tokens.length; i++) {
         for (int j = 0; j < tokens[i].length; j++) {
@@ -88,7 +93,9 @@ public HashMap<String, Integer> countCorpus2D(String[][] tokens) {
 }
 
 public class TimeMachine {
-    // Split text lines into word or character tokens.
+    /**
+     * Split text lines into word or character tokens.
+     */
     public static String[][] tokenize(String[] lines, String token) throws Exception {
         String[][] output = new String[lines.length][];
         if (token == "word") {
@@ -105,7 +112,9 @@ public class TimeMachine {
         return output; 
     }
 
-    // Read `The Time Machine` dataset and return an array of the lines
+    /**
+     * Read `The Time Machine` dataset and return an array of the lines
+     */
     public static String[] readTimeMachine() throws IOException {
         URL url = new URL("http://d2l-data.s3-accelerate.amazonaws.com/timemachine.txt");
         String[] lines;
@@ -119,8 +128,10 @@ public class TimeMachine {
         return lines;
     }
 
+    /** 
+     * Return token indices and the vocabulary of the time machine dataset.
+     */
     public static Pair<List<Integer>, Vocab> loadCorpusTimeMachine(int maxTokens) throws IOException, Exception {
-        /* Return token indices and the vocabulary of the time machine dataset. */
         String[] lines = readTimeMachine();
         String[][] tokens = tokenize(lines, "char");
         Vocab vocab = new Vocab(tokens, 0, new String[0]);
@@ -148,8 +159,8 @@ public class SeqDataLoader implements Iterable<NDList> {
     public int batchSize;
     public int numSteps;
     
-    @SuppressWarnings("unchecked")
     /* An iterator to load sequence data. */
+    @SuppressWarnings("unchecked")
     public SeqDataLoader(int batchSize, int numSteps, boolean useRandomIter, int maxTokens) throws IOException, Exception {
         Pair<List<Integer>, Vocab> corpusVocabPair = TimeMachine.loadCorpusTimeMachine(maxTokens);
         this.corpus = corpusVocabPair.getKey();
@@ -169,17 +180,20 @@ public class SeqDataLoader implements Iterable<NDList> {
         return dataIter.iterator();
     }
 }
-
+/**
+ * Return the iterator and the vocabulary of the time machine dataset.
+ */ 
 public Pair<ArrayList<NDList>, Vocab> loadDataTimeMachine(int batchSize, int numSteps, boolean useRandomIter, int maxTokens) throws IOException, Exception {
-    /* Return the iterator and the vocabulary of the time machine dataset. */
+    
     SeqDataLoader seqData = new SeqDataLoader(batchSize, numSteps, useRandomIter, maxTokens);
     return new Pair(seqData.dataIter, seqData.vocab); // ArrayList<NDList>, Vocab
 }
 
-
+/**
+ * Generate a minibatch of subsequences using random sampling.
+ */
 public ArrayList<NDList>
         seqDataIterRandom(List<Integer> corpus, int batchSize, int numSteps, NDManager manager) {
-    /*Generate a minibatch of subsequences using random sampling.*/
     // Start with a random offset (inclusive of `numSteps - 1`) to partition a
     // sequence
     corpus = corpus.subList(new Random().nextInt(numSteps - 1), corpus.size());
@@ -224,8 +238,10 @@ ArrayList<Integer> data(int pos, List<Integer> corpus, int numSteps) {
     return new ArrayList<Integer>(corpus.subList(pos, pos + numSteps));
 }
 
+/** 
+ * Generate a minibatch of subsequences using sequential partitioning.
+ */
 public ArrayList<NDList> seqDataIterSequential(List<Integer> corpus, int batchSize, int numSteps, NDManager manager) {
-    /*Generate a minibatch of subsequences using sequential partitioning.*/
     // Start with a random offset to partition a sequence
     int offset = new Random().nextInt(numSteps);
     int numTokens = ((corpus.size() - offset - 1) / batchSize) * batchSize;
