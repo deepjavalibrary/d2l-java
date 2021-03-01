@@ -217,12 +217,12 @@ public ArrayList<NDList>
         // subsequences
         List<Integer> initialIndicesPerBatch = initialIndices.subList(i, i + batchSize);
 
-        NDArray xNDArray = manager.create(new Shape(initialIndices.size(), numSteps), DataType.INT32);
-        NDArray yNDArray = manager.create(new Shape(initialIndices.size(), numSteps), DataType.INT32);
-        for (int j = 0; j < initialIndices.size(); j++) {
-            ArrayList<Integer> X = data(initialIndices.get(j), corpus, numSteps);
+        NDArray xNDArray = manager.create(new Shape(initialIndicesPerBatch.size(), numSteps), DataType.INT32);
+        NDArray yNDArray = manager.create(new Shape(initialIndicesPerBatch.size(), numSteps), DataType.INT32);
+        for (int j = 0; j < initialIndicesPerBatch.size(); j++) {
+            ArrayList<Integer> X = data(initialIndicesPerBatch.get(j), corpus, numSteps);
             xNDArray.set(new NDIndex(j), manager.create(X.stream().mapToInt(Integer::intValue).toArray()));
-            ArrayList<Integer> Y = data(initialIndices.get(j)+1, corpus, numSteps);
+            ArrayList<Integer> Y = data(initialIndicesPerBatch.get(j)+1, corpus, numSteps);
             yNDArray.set(new NDIndex(j), manager.create(Y.stream().mapToInt(Integer::intValue).toArray()));
         }
         NDList pair = new NDList();
