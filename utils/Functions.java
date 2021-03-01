@@ -20,4 +20,11 @@ public class Functions {
         }
         return ret;
     }
+
+    /**
+     * Return the i'th GPU if it exists, otherwise return the CPU 
+     */
+    public static Device tryGpu(int i) {
+        return Device.getGpuCount() >= i + 1 ? Device.gpu(i) : Device.cpu();
+    }
 }
