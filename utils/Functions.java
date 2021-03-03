@@ -27,4 +27,29 @@ public class Functions {
     public static Device tryGpu(int i) {
         return Device.getGpuCount() >= i + 1 ? Device.gpu(i) : Device.cpu();
     }
+
+    @FunctionalInterface
+    public interface TriFunction<T, U, V, W> {
+        public W apply(T t, U u, V v);
+    }
+
+    @FunctionalInterface
+    public interface QuadFunction<T, U, V, W, R> {
+        public R apply(T t, U u, V v, W w);
+    }
+
+    @FunctionalInterface
+    public interface SimpleFunction<T> {
+        public T apply();
+    }
+
+    @FunctionalInterface
+    public interface voidFunction<T> {
+        public void apply(T t);
+    }
+
+    @FunctionalInterface
+    public interface voidTwoFunction<T, U> {
+        public void apply(T t, U u);
+    }
 }

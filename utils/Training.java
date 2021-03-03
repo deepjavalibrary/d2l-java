@@ -33,6 +33,18 @@ class Training {
         }
     }
 
+    /** Allow to do gradient calculations on subManager **/
+    public static void sgd(NDList params, float lr, int batchSize, NDManager subManager) {
+        for (int i = 0; i < params.size(); i++) {
+            NDArray param = params.get(i);
+            // Update param in place.
+            // param = param - param.gradient * lr / batchSize
+            NDArray gradient = param.getGradient();
+            gradient.attach(subManager);
+            param.subi(gradient.mul(lr).div(batchSize));
+        }
+    }
+
     public static float accuracy(NDArray yHat, NDArray y) {
         // Check size of 1st dimension greater than 1
         // to see if we have multiple samples
