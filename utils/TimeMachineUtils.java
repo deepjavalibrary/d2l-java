@@ -394,27 +394,25 @@ public class TimeMachine {
                 outputs.add((int) y.argMax(1).reshape(new Shape(1)).getLong(0L));
             }
         } else {
-            RNNModel castedNet = (RNNModel) net;
+            AbstractBlock castedNet = (AbstractBlock) net;
             NDArray state = null;
             for (char c : prefix.substring(1).toCharArray()) { // Warm-up period
                 if (state == null) {
                     // Begin state
                     state =
                             castedNet
-                                    .forwardInternal(
+                                    .forward(
                                             new ParameterStore(manager, false),
                                             new NDList(getInput.apply()),
-                                            false,
-                                            null)
+                                            false)
                                     .get(1);
                 } else {
                     state =
                             castedNet
-                                    .forwardInternal(
+                                    .forward(
                                             new ParameterStore(manager, false),
                                             new NDList(getInput.apply(), state),
-                                            false,
-                                            null)
+                                            false)
                                     .get(1);
                 }
                 outputs.add(vocab.getIdx("" + c));
@@ -423,11 +421,10 @@ public class TimeMachine {
             NDArray y;
             for (int i = 0; i < numPreds; i++) {
                 NDList pair =
-                        castedNet.forwardInternal(
+                        castedNet.forward(
                                 new ParameterStore(manager, false),
                                 new NDList(getInput.apply(), state),
-                                false,
-                                null);
+                                false);
                 y = pair.get(0);
                 state = pair.get(1);
 
@@ -463,7 +460,7 @@ public class TimeMachine {
                             Training.sgd(castedNet.params, lr, batchSize, subManager);
         } else {
             // Already initialized net
-            RNNModel castedNet = (RNNModel) net;
+            AbstractBlock castedNet = (AbstractBlock) net;
             Model model = Model.newInstance("model");
             model.setBlock(castedNet);
 
@@ -558,20 +555,18 @@ public class TimeMachine {
                         if (state == null) {
                             // Begin state
                             pairResult =
-                                    ((RNNModel) net)
-                                            .forwardInternal(
+                                    ((AbstractBlock) net)
+                                            .forward(
                                                     new ParameterStore(manager, false),
                                                     new NDList(X),
-                                                    true,
-                                                    null);
+                                                    true);
                         } else {
                             pairResult =
-                                    ((RNNModel) net)
-                                            .forwardInternal(
+                                    ((AbstractBlock) net)
+                                            .forward(
                                                     new ParameterStore(manager, false),
                                                     new NDList(X, state),
-                                                    true,
-                                                    null);
+                                                    true);
                         }
                         yHat = pairResult.get(0);
                         state = pairResult.get(1);
@@ -597,7 +592,7 @@ public class TimeMachine {
             params = ((RNNModelScratch) net).params;
         } else {
             params = new NDList();
-            for (Pair<String, Parameter> pair : ((RNNModel) net).getParameters()) {
+            for (Pair<String, Parameter> pair : ((AbstractBlock) net).getParameters()) {
                 params.add(pair.getValue().getArray());
             }
         }
