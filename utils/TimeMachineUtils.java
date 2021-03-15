@@ -13,7 +13,9 @@ import ai.djl.training.tracker.*;
 import ai.djl.training.initializer.*;
 import ai.djl.training.evaluator.*;
 import ai.djl.training.optimizer.*;
+import ai.djl.training.dataset.*;
 import ai.djl.training.listener.*;
+import ai.djl.translate.TranslateException;
 
 import java.io.*;
 import java.net.URL;
@@ -442,13 +444,14 @@ public class TimeMachine {
     /** Train a model. */
     public static void trainCh8(
             Object net,
-            List<NDList> trainIter,
+            RandomAccessDataset dataset,
             Vocab vocab,
             int lr,
             int numEpochs,
             Device device,
             boolean useRandomIter,
-            NDManager manager) {
+            NDManager manager)
+            throws IOException, TranslateException {
         SoftmaxCrossEntropyLoss loss = new SoftmaxCrossEntropyLoss();
         Animator animator = new Animator();
 
@@ -464,7 +467,7 @@ public class TimeMachine {
             Model model = Model.newInstance("model");
             model.setBlock(castedNet);
 
-            Tracker lrt = Tracker.fixed(0.1f);
+            Tracker lrt = Tracker.fixed(lr);
             Optimizer sgd = Optimizer.sgd().setLearningRateTracker(lrt).build();
 
             DefaultTrainingConfig config =
@@ -487,18 +490,14 @@ public class TimeMachine {
         double ppl = 0.0;
         double speed = 0.0;
         for (int epoch = 0; epoch < numEpochs; epoch++) {
-            //            System.out.println("Epoch: " + epoch);
             Pair<Double, Double> pair =
-                    trainEpochCh8(net, trainIter, loss, updater, device, useRandomIter, manager);
+                    trainEpochCh8(net, dataset, loss, updater, device, useRandomIter, manager);
             ppl = pair.getKey();
             speed = pair.getValue();
             if ((epoch + 1) % 10 == 0) {
                 animator.add(epoch + 1, (float) ppl, "ppl");
                 animator.show();
             }
-            //            System.out.format(
-            //                    "perplexity: %.1f, %.1f tokens/sec on %s%n", ppl, speed,
-            // device.toString());
         }
         System.out.format(
                 "perplexity: %.1f, %.1f tokens/sec on %s%n", ppl, speed, device.toString());
@@ -509,22 +508,23 @@ public class TimeMachine {
     /** Train a model within one epoch. */
     public static Pair<Double, Double> trainEpochCh8(
             Object net,
-            List<NDList> trainIter,
+            RandomAccessDataset dataset,
             Loss loss,
             Functions.voidTwoFunction<Integer, NDManager> updater,
             Device device,
             boolean useRandomIter,
-            NDManager manager) {
+            NDManager manager)
+            throws IOException, TranslateException {
         StopWatch watch = new StopWatch();
         watch.start();
         Accumulator metric = new Accumulator(2); // Sum of training loss, no. of tokens
 
         try (NDManager childManager = manager.newSubManager()) {
             NDArray state = null;
-            for (NDList pair : trainIter) {
-                NDArray X = pair.get(0).toDevice(Functions.tryGpu(0), true);
+            for (Batch batch : dataset.getData(manager)) {
+                NDArray X = batch.getData().head().toDevice(Functions.tryGpu(0), true);
                 X.attach(childManager);
-                NDArray Y = pair.get(1).toDevice(Functions.tryGpu(0), true);
+                NDArray Y = batch.getLabels().head().toDevice(Functions.tryGpu(0), true);
                 Y.attach(childManager);
                 if (state == null || useRandomIter) {
                     // Initialize `state` when either it is the first iteration or
@@ -573,7 +573,6 @@ public class TimeMachine {
                     }
 
                     NDArray l = loss.evaluate(new NDList(y), new NDList(yHat)).mean();
-                    //                    System.out.println("Loss: " + l.getFloat());
                     gc.backward(l);
                     metric.add(new float[] {l.getFloat() * y.size(), y.size()});
                 }
@@ -607,6 +606,123 @@ public class TimeMachine {
                 NDArray gradient = param.getGradient().stopGradient();
                 param.getGradient().set(new NDIndex(":"), gradient.mul(theta / norm));
             }
+        }
+    }
+}
+
+public class TimeMachineDataset extends RandomAccessDataset {
+
+    private Vocab vocab;
+    private NDArray data;
+    private NDArray labels;
+    private int numSteps;
+    private int maxTokens;
+    private int batchSize;
+    private NDManager manager;
+    private boolean prepared;
+
+    public TimeMachineDataset(Builder builder) {
+        super(builder);
+        this.numSteps = builder.numSteps;
+        this.maxTokens = builder.maxTokens;
+        this.batchSize = builder.getSampler().getBatchSize();
+        this.manager = builder.manager;
+        this.data = this.manager.create(new Shape(0,35), DataType.INT32);
+        this.labels = this.manager.create(new Shape(0,35), DataType.INT32);
+        this.prepared = false;
+    }
+
+    @Override
+    public Record get(NDManager manager, long index) throws IOException {
+        NDArray X = data.get(new NDIndex("{}", index));
+        NDArray Y = labels.get(new NDIndex("{}", index));
+        return new Record(new NDList(X), new NDList(Y));
+    }
+
+    @Override
+    protected long availableSize() {
+        return data.getShape().get(0);
+    }
+
+    @Override
+    public void prepare(Progress progress) throws IOException, TranslateException {
+        if (prepared) {
+            return;
+        }
+
+        Pair<List<Integer>, Vocab> corpusVocabPair = null;
+        try {
+            corpusVocabPair = TimeMachine.loadCorpusTimeMachine(maxTokens);
+        } catch (Exception e) {
+            e.printStackTrace(); // Exception can be from unknown token type during tokenize() function.
+        }
+        List<Integer> corpus = corpusVocabPair.getKey();
+        this.vocab = corpusVocabPair.getValue();
+
+        // Start with a random offset (inclusive of `numSteps - 1`) to partition a
+        // sequence
+        int offset = new Random().nextInt(numSteps);
+        int numTokens = ((int) ((corpus.size() - offset - 1) / batchSize)) * batchSize;
+        NDArray Xs =
+                manager.create(
+                        corpus.subList(offset, offset + numTokens).stream()
+                                .mapToInt(Integer::intValue)
+                                .toArray());
+        NDArray Ys =
+                manager.create(
+                        corpus.subList(offset + 1, offset + 1 + numTokens).stream()
+                                .mapToInt(Integer::intValue)
+                                .toArray());
+        Xs = Xs.reshape(new Shape(batchSize, -1));
+        Ys = Ys.reshape(new Shape(batchSize, -1));
+        int numBatches = (int) Xs.getShape().get(1) / numSteps;
+
+        for (int i = 0; i < numSteps * numBatches; i += numSteps) {
+            NDArray X = Xs.get(new NDIndex(":, {}:{}", i, i + numSteps));
+            NDArray Y = Ys.get(new NDIndex(":, {}:{}", i, i + numSteps));
+            // Temp variables to be able to detach NDArray which will be replaced
+            NDArray temp = this.data;
+            NDArray temp2 = this.data;
+            this.data = this.data.concat(X);
+            this.labels = this.labels.concat(Y);
+            temp.detach();
+            temp2.detach();
+        }
+        this.prepared = true;
+    }
+
+    public Vocab getVocab() {
+        return this.vocab;
+    }
+
+    public static final class Builder extends BaseBuilder<Builder> {
+
+        int numSteps;
+        int maxTokens;
+        NDManager manager;
+
+
+        @Override
+        protected Builder self() { return this; }
+
+        public Builder setSteps(int steps) {
+            this.numSteps = steps;
+            return this;
+        }
+
+        public Builder setMaxTokens(int maxTokens) {
+            this.maxTokens = maxTokens;
+            return this;
+        }
+
+        public Builder setManager(NDManager manager) {
+            this.manager = manager;
+            return this;
+        }
+
+        public TimeMachineDataset build() throws IOException, TranslateException {
+            TimeMachineDataset dataset = new TimeMachineDataset(this);
+            return dataset;
         }
     }
 }
