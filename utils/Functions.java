@@ -1,3 +1,4 @@
+import ai.djl.Device;
 import java.util.function.Function;
 
 public class Functions {
