@@ -253,7 +253,7 @@ public class RNNModelScratch {
         this.forwardFn = forwardFn;
     }
 
-    public Pair call(NDArray X, NDArray state) {
+    public Pair forward(NDArray X, NDArray state) {
         X = X.transpose().oneHot(this.vocabSize);
         return this.forwardFn.apply(X, state, this.params);
     }
@@ -383,13 +383,13 @@ public class TimeMachine {
             NDArray state = castedNet.beginState(1, device);
 
             for (char c : prefix.substring(1).toCharArray()) { // Warm-up period
-                state = (NDArray) castedNet.call(getInput.apply(), state).getValue();
+                state = (NDArray) castedNet.forward(getInput.apply(), state).getValue();
                 outputs.add(vocab.getIdx("" + c));
             }
 
             NDArray y;
             for (int i = 0; i < numPreds; i++) {
-                Pair<NDArray, NDArray> pair = castedNet.call(getInput.apply(), state);
+                Pair<NDArray, NDArray> pair = castedNet.forward(getInput.apply(), state);
                 y = pair.getKey();
                 state = pair.getValue();
 
@@ -434,11 +434,11 @@ public class TimeMachine {
             }
         }
 
-        String outputString = "";
+        StringBuilder output = new StringBuilder();
         for (int i : outputs) {
-            outputString += vocab.idxToToken.get(i);
+            output.append(vocab.idxToToken.get(i));
         }
-        return outputString;
+        return output.toString();
     }
 
     /** Train a model. */
@@ -547,7 +547,7 @@ public class TimeMachine {
                 try (GradientCollector gc = Engine.getInstance().newGradientCollector()) {
                     NDArray yHat;
                     if (net instanceof RNNModelScratch) {
-                        Pair<NDArray, NDArray> pairResult = ((RNNModelScratch) net).call(X, state);
+                        Pair<NDArray, NDArray> pairResult = ((RNNModelScratch) net).forward(X, state);
                         yHat = pairResult.getKey();
                         state = pairResult.getValue();
                     } else {
@@ -580,7 +580,7 @@ public class TimeMachine {
                 updater.apply(1, childManager); // Since the `mean` function has been invoked
             }
         }
-        return new Pair(Math.exp(metric.get(0) / metric.get(1)), metric.get(1) / watch.stop());
+        return new Pair<>(Math.exp(metric.get(0) / metric.get(1)), metric.get(1) / watch.stop());
     }
 
     /** Clip the gradient. */
