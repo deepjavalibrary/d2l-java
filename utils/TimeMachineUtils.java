@@ -30,7 +30,7 @@ public class Vocab {
 
     public Vocab(String[][] tokens, int minFreq, String[] reservedTokens) {
         // Sort according to frequencies
-        HashMap<String, Integer> counter = countCorpus2D(tokens);
+        LinkedHashMap<String, Integer> counter = countCorpus2D(tokens);
         this.tokenFreqs = new ArrayList<Map.Entry<String, Integer>>(counter.entrySet());
         Collections.sort(
                 tokenFreqs,
@@ -77,9 +77,9 @@ public class Vocab {
     }
 
     /** Count token frequencies. */
-    public HashMap<String, Integer> countCorpus(String[] tokens) {
+    public LinkedHashMap<String, Integer> countCorpus(String[] tokens) {
 
-        HashMap<String, Integer> counter = new HashMap<>();
+        LinkedHashMap<String, Integer> counter = new LinkedHashMap<>();
         if (tokens.length != 0) {
             for (String token : tokens) {
                 counter.put(token, counter.getOrDefault(token, 0) + 1);
@@ -89,7 +89,7 @@ public class Vocab {
     }
 
     /** Flatten a list of token lists into a list of tokens */
-    public HashMap<String, Integer> countCorpus2D(String[][] tokens) {
+    public LinkedHashMap<String, Integer> countCorpus2D(String[][] tokens) {
         List<String> allTokens = new ArrayList<String>();
         for (int i = 0; i < tokens.length; i++) {
             for (int j = 0; j < tokens[i].length; j++) {
