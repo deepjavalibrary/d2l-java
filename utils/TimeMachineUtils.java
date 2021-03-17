@@ -263,19 +263,20 @@ public class RNNModelScratch {
     }
 }
 
-public class RNNModel extends AbstractBlock {
+public class RNNModel<T extends AbstractBlock> extends AbstractBlock {
 
     private static final byte VERSION = 2;
-    private RNN rnnLayer;
+    private T rnnLayer;
     private Linear dense;
     private int vocabSize;
 
-    public RNNModel(RNN rnnLayer, int vocabSize) {
+    public RNNModel (T rnnLayer, int vocabSize) {
         super(VERSION);
         this.rnnLayer = rnnLayer;
         this.addChildBlock("rnn", rnnLayer);
         this.vocabSize = vocabSize;
         this.dense = Linear.builder().setUnits(vocabSize).build();
+        this.addChildBlock("linear", dense);
     }
 
     /** {@inheritDoc} */
@@ -453,7 +454,7 @@ public class TimeMachine {
             NDManager manager)
             throws IOException, TranslateException {
         SoftmaxCrossEntropyLoss loss = new SoftmaxCrossEntropyLoss();
-        //        Animator animator = new Animator();
+        Animator animator = new Animator();
 
         Functions.voidTwoFunction<Integer, NDManager> updater;
         if (net instanceof RNNModelScratch) {
@@ -495,12 +496,9 @@ public class TimeMachine {
             ppl = pair.getKey();
             speed = pair.getValue();
             if ((epoch + 1) % 10 == 0) {
-                //                animator.add(epoch + 1, (float) ppl, "ppl");
-                //                animator.show();
+                animator.add(epoch + 1, (float) ppl, "ppl");
+                animator.show();
             }
-            System.out.format(
-                    "epoch: %d, perplexity: %.1f, %.1f tokens/sec on %s%n",
-                    epoch, ppl, speed, device.toString());
         }
         System.out.format(
                 "perplexity: %.1f, %.1f tokens/sec on %s%n", ppl, speed, device.toString());
