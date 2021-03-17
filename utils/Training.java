@@ -1,17 +1,18 @@
-import ai.djl.ndarray.*;
 import ai.djl.metric.Metrics;
+import ai.djl.ndarray.NDArray;
+import ai.djl.ndarray.NDList;
+import ai.djl.ndarray.NDManager;
+import ai.djl.ndarray.types.DataType;
 import ai.djl.training.EasyTrain;
 import ai.djl.training.Trainer;
 import ai.djl.training.dataset.ArrayDataset;
-
-import java.io.IOException;
-import java.util.Map;
-import ai.djl.ndarray.types.DataType;
 import ai.djl.training.dataset.Batch;
 import ai.djl.translate.TranslateException;
 
-import java.util.function.UnaryOperator;
+import java.io.IOException;
+import java.util.Map;
 import java.util.function.BinaryOperator;
+import java.util.function.UnaryOperator;
 
 class Training {
 
@@ -30,6 +31,18 @@ class Training {
             // Update param in place.
             // param = param - param.gradient * lr / batchSize
             param.subi(param.getGradient().mul(lr).div(batchSize));
+        }
+    }
+
+    /** Allow to do gradient calculations on subManager **/
+    public static void sgd(NDList params, float lr, int batchSize, NDManager subManager) {
+        for (int i = 0; i < params.size(); i++) {
+            NDArray param = params.get(i);
+            // Update param in place.
+            // param = param - param.gradient * lr / batchSize
+            NDArray gradient = param.getGradient();
+            gradient.attach(subManager);
+            param.subi(gradient.mul(lr).div(batchSize));
         }
     }
 
