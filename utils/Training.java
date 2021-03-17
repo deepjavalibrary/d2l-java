@@ -33,6 +33,24 @@ class Training {
         }
     }
 
+    /**
+     * Allows to do gradient calculations on a subManager. This is very useful when you are training
+     * on a lot of epochs. This subManager could later be closed and all NDArrays generated from the
+     * calculations in this function will be cleared from memory when subManager is closed. This is
+     * always a great practice but the impact is most notable when there is lot of data on various
+     * epochs.
+     */
+    public static void sgd(NDList params, float lr, int batchSize, NDManager subManager) {
+        for (int i = 0; i < params.size(); i++) {
+            NDArray param = params.get(i);
+            // Update param in place.
+            // param = param - param.gradient * lr / batchSize
+            NDArray gradient = param.getGradient();
+            gradient.attach(subManager);
+            param.subi(gradient.mul(lr).div(batchSize));
+        }
+    }
+
     public static float accuracy(NDArray yHat, NDArray y) {
         // Check size of 1st dimension greater than 1
         // to see if we have multiple samples

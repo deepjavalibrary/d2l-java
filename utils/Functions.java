@@ -1,3 +1,4 @@
+import ai.djl.Device;
 import java.util.function.Function;
 
 public class Functions {
@@ -19,5 +20,37 @@ public class Functions {
             ret[i] = x[i];
         }
         return ret;
+    }
+
+    /**
+     * Return the i'th GPU if it exists, otherwise return the CPU 
+     */
+    public static Device tryGpu(int i) {
+        return Device.getGpuCount() >= i + 1 ? Device.gpu(i) : Device.cpu();
+    }
+
+    @FunctionalInterface
+    public interface TriFunction<T, U, V, W> {
+        public W apply(T t, U u, V v);
+    }
+
+    @FunctionalInterface
+    public interface QuadFunction<T, U, V, W, R> {
+        public R apply(T t, U u, V v, W w);
+    }
+
+    @FunctionalInterface
+    public interface SimpleFunction<T> {
+        public T apply();
+    }
+
+    @FunctionalInterface
+    public interface voidFunction<T> {
+        public void apply(T t);
+    }
+
+    @FunctionalInterface
+    public interface voidTwoFunction<T, U> {
+        public void apply(T t, U u);
     }
 }

@@ -15,7 +15,7 @@ public class Vocab {
 
     public Vocab(String[][] tokens, int minFreq, String[] reservedTokens) {
         // Sort according to frequencies
-        HashMap<String, Integer> counter = countCorpus2D(tokens);
+        LinkedHashMap<String, Integer> counter = countCorpus2D(tokens);
         this.tokenFreqs = new ArrayList<Map.Entry<String, Integer>>(counter.entrySet()); 
         Collections.sort(tokenFreqs, 
             new Comparator<Map.Entry<String, Integer>>() { 
@@ -66,9 +66,9 @@ public class Vocab {
 /** 
  * Count token frequencies.
  */
-public HashMap<String, Integer> countCorpus(String[] tokens) {
+public LinkedHashMap<String, Integer> countCorpus(String[] tokens) {
     
-    HashMap<String, Integer> counter = new HashMap<>();
+    LinkedHashMap<String, Integer> counter = new LinkedHashMap<>();
     if (tokens.length != 0) {
         for (String token : tokens) {
             counter.put(token, counter.getOrDefault(token, 0)+1);
@@ -80,7 +80,7 @@ public HashMap<String, Integer> countCorpus(String[] tokens) {
 /**
  * Flatten a list of token lists into a list of tokens
  */
-public HashMap<String, Integer> countCorpus2D(String[][] tokens) {
+public LinkedHashMap<String, Integer> countCorpus2D(String[][] tokens) {
     List<String> allTokens = new ArrayList<String>();
     for (int i = 0; i < tokens.length; i++) {
         for (int j = 0; j < tokens[i].length; j++) {
@@ -217,12 +217,12 @@ public ArrayList<NDList>
         // subsequences
         List<Integer> initialIndicesPerBatch = initialIndices.subList(i, i + batchSize);
 
-        NDArray xNDArray = manager.create(new Shape(initialIndices.size(), numSteps), DataType.INT32);
-        NDArray yNDArray = manager.create(new Shape(initialIndices.size(), numSteps), DataType.INT32);
-        for (int j = 0; j < initialIndices.size(); j++) {
-            ArrayList<Integer> X = data(initialIndices.get(j), corpus, numSteps);
+        NDArray xNDArray = manager.create(new Shape(initialIndicesPerBatch.size(), numSteps), DataType.INT32);
+        NDArray yNDArray = manager.create(new Shape(initialIndicesPerBatch.size(), numSteps), DataType.INT32);
+        for (int j = 0; j < initialIndicesPerBatch.size(); j++) {
+            ArrayList<Integer> X = data(initialIndicesPerBatch.get(j), corpus, numSteps);
             xNDArray.set(new NDIndex(j), manager.create(X.stream().mapToInt(Integer::intValue).toArray()));
-            ArrayList<Integer> Y = data(initialIndices.get(j)+1, corpus, numSteps);
+            ArrayList<Integer> Y = data(initialIndicesPerBatch.get(j)+1, corpus, numSteps);
             yNDArray.set(new NDIndex(j), manager.create(Y.stream().mapToInt(Integer::intValue).toArray()));
         }
         NDList pair = new NDList();
