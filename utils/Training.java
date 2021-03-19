@@ -1,17 +1,18 @@
-import ai.djl.ndarray.*;
 import ai.djl.metric.Metrics;
+import ai.djl.ndarray.NDArray;
+import ai.djl.ndarray.NDList;
+import ai.djl.ndarray.NDManager;
+import ai.djl.ndarray.types.DataType;
 import ai.djl.training.EasyTrain;
 import ai.djl.training.Trainer;
 import ai.djl.training.dataset.ArrayDataset;
-
-import java.io.IOException;
-import java.util.Map;
-import ai.djl.ndarray.types.DataType;
 import ai.djl.training.dataset.Batch;
 import ai.djl.translate.TranslateException;
 
-import java.util.function.UnaryOperator;
+import java.io.IOException;
+import java.util.Map;
 import java.util.function.BinaryOperator;
+import java.util.function.UnaryOperator;
 
 class Training {
 

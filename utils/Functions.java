@@ -11,7 +11,7 @@ public class Functions {
         }
         return y;
     }
-    
+
     // ScatterTrace.builder() does not support float[],
     // so we must convert to a double array first
     public static double[] floatToDoubleArray(float[] x) {
@@ -22,33 +22,49 @@ public class Functions {
         return ret;
     }
 
-    /**
-     * Return the i'th GPU if it exists, otherwise return the CPU 
-     */
+    /** Return the i'th GPU if it exists, otherwise return the CPU */
     public static Device tryGpu(int i) {
         return Device.getGpuCount() >= i + 1 ? Device.gpu(i) : Device.cpu();
     }
 
+    /**
+     * Helper function to later be able to use lambda. Accepts three types for parameters and one
+     * for output.
+     */
     @FunctionalInterface
     public interface TriFunction<T, U, V, W> {
         public W apply(T t, U u, V v);
     }
 
+    /**
+     * Helper function to later be able to use lambda. Accepts 4 types for parameters and one
+     * for output.
+     */
     @FunctionalInterface
     public interface QuadFunction<T, U, V, W, R> {
         public R apply(T t, U u, V v, W w);
     }
 
+    /**
+     * Helper function to later be able to use lambda. Doesn't have any type for parameters and has one type
+     * for output.
+     */
     @FunctionalInterface
     public interface SimpleFunction<T> {
         public T apply();
     }
 
+    /**
+     * Helper function to later be able to use lambda. Accepts one types for parameters and uses void for return.
+     */
     @FunctionalInterface
     public interface voidFunction<T> {
         public void apply(T t);
     }
 
+    /**
+     * Helper function to later be able to use lambda. Accepts two types for parameters and uses void for return.
+     */
     @FunctionalInterface
     public interface voidTwoFunction<T, U> {
         public void apply(T t, U u);
