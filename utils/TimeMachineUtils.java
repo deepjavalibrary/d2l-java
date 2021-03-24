@@ -606,8 +606,8 @@ public class TimeMachine {
         double norm = Math.sqrt(result);
         if (norm > theta) {
             for (NDArray param : params) {
-                NDArray gradient = param.getGradient().stopGradient();
-                param.getGradient().set(new NDIndex(":"), gradient.mul(theta / norm));
+                NDArray gradient = param.getGradient();
+                gradient.muli(theta / norm);
             }
         }
     }
