@@ -22,6 +22,12 @@ import java.net.URL;
 import java.util.*;
 import java.util.function.*;
 
+%load ../utils/Functions.java
+%load ../utils/Animator.java
+%load ../utils/Training.java
+%load ../utils/StopWatch.java
+%load ../utils/Accumulator.java
+
 public class Vocab {
     public int unk;
     public List<Map.Entry<String, Integer>> tokenFreqs;
