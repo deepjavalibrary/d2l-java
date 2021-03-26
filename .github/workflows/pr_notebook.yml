@@ -21,13 +21,14 @@ jobs:
     runs-on: ubuntu-18.04
     strategy:
       matrix:
-        group: ["CH1_CH4_DROPOUT", "CH4_MID", "CH4_REST", "CH8_1", "CH8_2", "CH11", "REST"]
+        group: ["CH1_CH4_DROPOUT", "CH4_MID", "CH4_REST", "CH8_1", "CH8_2", "CH9", "CH11", "REST"]
     env:
       CH1_CH4_DROPOUT: "chapter_installation chapter_introduction chapter_preface chapter_preliminaries chapter_notation dropout.ipynb"
       CH4_MID: "underfit-overfit.ipynb mlp-djl.ipynb"
       CH4_REST: "mlp-scratch.ipynb backprop.ipynb environment.ipynb mlp.ipynb numerical-stability-and-init.ipynb weight-decay.ipynb"
       CH8_1: "text-preprocessing.ipynb language-models-and-dataset.ipynb rnn.ipynb"
       CH8_2: "rnn-scratch.ipynb bptt.ipynb"
+      CH9: "machine-translation-and-dataset.ipynb"
       CH11: "chapter_optimization"
       REST: "chapter_convolutional-neural-networks chapter_linear-networks utils"
     steps:
