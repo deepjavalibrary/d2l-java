@@ -298,12 +298,12 @@ public class RNNModel<T extends AbstractBlock> extends AbstractBlock {
         inputs.set(0, X);
         NDList result = this.rnnLayer.forward(parameterStore, inputs, training);
         NDArray Y = result.get(0);
-        NDArray state = result.get(1);
+        NDList state = result.subNDList(1);
 
         int shapeLength = Y.getShape().getShape().length;
         NDList output = this.dense.forward(parameterStore, new NDList(Y
                 .reshape(new Shape(-1, Y.getShape().get(shapeLength-1)))), training);
-        return new NDList(output.get(0), state);
+        return new NDList(output.get(0)).addAll(state);
     }
 
 
