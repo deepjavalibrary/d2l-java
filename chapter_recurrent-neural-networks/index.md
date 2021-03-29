@@ -21,13 +21,14 @@ Many of the examples for using recurrent networks are based on text data. Hence,
 Next, we discuss basic concepts of a language model and use this discussion as the inspiration for the design of RNNs.
 In the end, we describe the gradient calculation method for RNNs to explore problems that may be encountered when training such networks.
 
-:begin_tab:toc
- - [sequence](sequence.ipynb)
- - [text-preprocessing](text-preprocessing.ipynb)
- - [language-models-and-dataset](language-models-and-dataset.ipynb)
- - [rnn](rnn.ipynb)
- - [rnn-scratch](rnn-scratch.ipynb)
- - [rnn-concise](rnn-concise.ipynb)
- - [bptt](bptt.ipynb)
-:end_tab:
+```toc
+:maxdepth: 2
 
+sequence
+text-preprocessing
+language-models-and-dataset
+rnn
+rnn-scratch
+rnn-concise
+bptt
+```

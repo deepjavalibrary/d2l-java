@@ -46,13 +46,15 @@ we will take machine translation as an example,
 and introduce the encoder-decoder architecture based on
 RNNs and beam search for sequence generation.
 
-:begin_tab:toc
- - [gru](gru.ipynb)
- - [lstm](lstm.ipynb)
- - [deep-rnn](deep-rnn.ipynb)
- - [bi-rnn](bi-rnn.ipynb)
- - [machine-translation-and-dataset](machine-translation-and-dataset.ipynb)
- - [encoder-decoder](encoder-decoder.ipynb)
- - [seq2seq](seq2seq.ipynb)
- - [beam-search](beam-search.ipynb)
-:end_tab:
+```toc
+:maxdepth: 2
+
+gru
+lstm
+deep-rnn
+bi-rnn
+machine-translation-and-dataset
+encoder-decoder
+seq2seq
+beam-search
+```
