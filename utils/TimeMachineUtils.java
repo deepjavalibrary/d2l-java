@@ -22,6 +22,12 @@ import java.net.URL;
 import java.util.*;
 import java.util.function.*;
 
+%load ../utils/Functions.java
+%load ../utils/Animator.java
+%load ../utils/Training.java
+%load ../utils/StopWatch.java
+%load ../utils/Accumulator.java
+
 public class Vocab {
     public int unk;
     public List<Map.Entry<String, Integer>> tokenFreqs;
@@ -606,8 +612,8 @@ public class TimeMachine {
         double norm = Math.sqrt(result);
         if (norm > theta) {
             for (NDArray param : params) {
-                NDArray gradient = param.getGradient().stopGradient();
-                param.getGradient().set(new NDIndex(":"), gradient.mul(theta / norm));
+                NDArray gradient = param.getGradient();
+                gradient.muli(theta / norm);
             }
         }
     }
