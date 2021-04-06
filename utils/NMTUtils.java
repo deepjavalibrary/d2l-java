@@ -107,7 +107,9 @@ public class NMT {
             ArrayList<String[]> lines, Vocab vocab, int numSteps, NDManager manager) {
         /* Transform text sequences of machine translation into minibatches. */
         ArrayList<Integer[]> linesIntArr = new ArrayList<>();
-        for (int i = 0; i < lines.size(); i++) linesIntArr.add(vocab.getIdxs(lines.get(i)));
+        for (int i = 0; i < lines.size(); i++) {
+            linesIntArr.add(vocab.getIdxs(lines.get(i)));
+        }
         for (int i = 0; i < linesIntArr.size(); i++) {
             ArrayList<Integer> temp = new ArrayList<>();
             temp.addAll(Arrays.asList(linesIntArr.get(i)));
@@ -155,7 +157,8 @@ public class NMT {
 
         ArrayDataset dataset =
                 new ArrayDataset.Builder()
-                        .setData(srcArr, srcValidLen, tgtArr, tgtValidLen)
+                        .setData(srcArr, srcValidLen)
+                        .optLabels(tgtArr, tgtValidLen)
                         .setSampling(batchSize, true)
                         .build();
 

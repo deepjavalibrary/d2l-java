@@ -82,6 +82,18 @@ public class Vocab {
         return this.tokenToIdx.getOrDefault(token, this.unk);
     }
 
+    public List<String> toTokens(List<Integer> indices) {
+        List<String> tokens = new ArrayList<>();
+        for (Integer index : indices) {
+            tokens.add(toToken(index));
+        }
+        return tokens;
+    }
+
+    public String toToken(Integer index) {
+        return this.idxToToken.get(index);
+    }
+
     /** Count token frequencies. */
     public LinkedHashMap<String, Integer> countCorpus(String[] tokens) {
 
