@@ -9,7 +9,9 @@ md = [
     "Since Java is not natively supported by Colab, we need to run the following code to enable Java kernel on Colab.\n",
     "\n",
     "1. Run the cell bellow (click it and press Shift+Enter),\n",
-    "2. If you want to use the GPU with MXNet, refresh the page (press F5) and stay at Python runtime on GPU. Run the following commands:\n"
+    "2. (If training on CPU, skip this step) If you want to use the GPU with MXNet in DJL 0.10.0, we need CUDA 10.1 or CUDA 10.2.\n"
+    "Since Colab supports CUDA 10.1, we will have to follow some steps to setup the environment.\n"
+    "Refresh the page (press F5) and stay at Python runtime on GPU. Run the following commands:\n"
     "\n"
     "!sudo rm /usr/local/cuda"
     "!ln -s /usr/local/cuda-10.1 /usr/local/cuda"
@@ -17,7 +19,7 @@ md = [
     "\n"
     "And then ensure that you have switched to CUDA 10.1 by running the following command:\n"
     "!nvcc --version"
-    "3. After that, switch runtime to Java and hardware to GPU. \n",
+    "3. After that, switch runtime to Java and hardware to GPU.(Might require refreshing the page and switching runtime)\n",
     "\n",
     "Now you can write Java code."
    ]
