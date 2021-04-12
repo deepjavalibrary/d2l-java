@@ -2,7 +2,7 @@ from pathlib import Path
 import glob, json
 
 build_script = "!curl -O https://raw.githubusercontent.com/aws-samples/d2l-java/master/tools/colab_build.sh && bash colab_build.sh"
-fix_gpu_script = "!curl -O https://raw.githubusercontent.com/aws-samples/d2l-java/01c3fcdcae62a13f363a04b87ef6ff08e64a2ebe/tools/fix-colab-gpu.sh && bash fix-colab-gpu.sh"
+fix_gpu_script = "!curl -O https://raw.githubusercontent.com/aws-samples/d2l-java/master/tools/fix-colab-gpu.sh && bash fix-colab-gpu.sh"
 script_constructor = {"cell_type": "code", "metadata": {}, "outputs": [], "source": [build_script], "execution_count": None}
 fix_gpu_constructor = {"cell_type": "code", "metadata": {}, "outputs": [], "source": [fix_gpu_script], "execution_count": None}
 
