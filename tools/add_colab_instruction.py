@@ -2,7 +2,9 @@ from pathlib import Path
 import glob, json
 
 build_script = "!curl -O https://raw.githubusercontent.com/aws-samples/d2l-java/master/tools/colab_build.sh && bash colab_build.sh"
+fix_gpu_script = "!curl -O https://raw.githubusercontent.com/aws-samples/d2l-java/01c3fcdcae62a13f363a04b87ef6ff08e64a2ebe/tools/fix-colab-gpu.sh && bash fix-colab-gpu.sh"
 script_constructor = {"cell_type": "code", "metadata": {}, "outputs": [], "source": [build_script], "execution_count": None}
+fix_gpu_constructor = {"cell_type": "code", "metadata": {}, "outputs": [], "source": [fix_gpu_script], "execution_count": None}
 
 md = [
     "## Prepare Java Kernel for Google Colab\n",
@@ -11,14 +13,9 @@ md = [
     "1. Run the cell bellow (click it and press Shift+Enter),\n",
     "2. (If training on CPU, skip this step) If you want to use the GPU with MXNet in DJL 0.10.0, we need CUDA 10.1 or CUDA 10.2.\n"
     "Since Colab supports CUDA 10.1, we will have to follow some steps to setup the environment.\n"
-    "Refresh the page (press F5) and stay at Python runtime on GPU. Run the following commands:\n"
+    "Refresh the page (press F5) and stay at Python runtime on GPU. Run the file fix-colab-gpu script.\n"
     "\n"
-    "!sudo rm /usr/local/cuda"
-    "!ln -s /usr/local/cuda-10.1 /usr/local/cuda"
-    "!ln -s /usr/local/cuda/lib64/libcudart.so /usr/lib64-nvidia\n"
-    "\n"
-    "And then ensure that you have switched to CUDA 10.1 by running the following command:\n"
-    "!nvcc --version"
+    "And then ensure that you have switched to CUDA 10.1.\n"
     "3. After that, switch runtime to Java and hardware to GPU.(Might require refreshing the page and switching runtime)\n",
     "\n",
     "Now you can write Java code."
@@ -31,4 +28,5 @@ for file in Path('.').glob('**/*.ipynb'):
     with open(file, 'w') as writer:
         data["cells"].insert(0, script_constructor)
         data["cells"].insert(0, instruction_constructor)
+        data["cells"].insert(0, fix_gpu_constructor)
         writer.write(json.dumps(data))
