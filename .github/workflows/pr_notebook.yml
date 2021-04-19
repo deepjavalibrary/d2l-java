@@ -32,7 +32,7 @@ jobs:
       CH9_1: "gru.ipynb lstm.ipynb deep-rnn.ipynb"
       CH9_2: "beam-search.ipynb"
       CH10_1: "attention-cues.ipynb nadaraya-waston.ipynb attention-scoring-functions.ipynb"
-      CH10_2: "multihead-attention.ipynb"
+      CH10_2: "multihead-attention.ipynb self-attention-and-positional-encoding.ipynb"
       CH11: "chapter_optimization"
       REST: "chapter_convolutional-neural-networks chapter_linear-networks utils"
     steps:
