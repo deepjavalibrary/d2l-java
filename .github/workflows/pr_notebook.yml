@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-18.04
     strategy:
       matrix:
-        group: ["CH1_CH4_DROPOUT", "CH4_MID", "CH4_REST", "CH8_1", "CH8_2", "CH9_1", "CH9_2", "CH11", "REST"]
+        group: ["CH1_CH4_DROPOUT", "CH4_MID", "CH4_REST", "CH8_1", "CH8_2", "CH9_1", "CH9_2", "CH10_1", "CH11", "REST"]
     env:
       CH1_CH4_DROPOUT: "chapter_installation chapter_introduction chapter_preface chapter_preliminaries chapter_notation dropout.ipynb"
       CH4_MID: "underfit-overfit.ipynb mlp-djl.ipynb"
@@ -31,6 +31,7 @@ jobs:
       CH8_2: "rnn-scratch.ipynb rnn-concise.ipynb bptt.ipynb"
       CH9_1: "gru.ipynb lstm.ipynb deep-rnn.ipynb"
       CH9_2: "beam-search.ipynb"
+      CH10_1: "attention-cues.ipynb"
       CH11: "chapter_optimization"
       REST: "chapter_convolutional-neural-networks chapter_linear-networks utils"
     steps:
