@@ -1,7 +1,7 @@
 from pathlib import Path
 import glob, json
 
-build_script = "!curl -O https://raw.githubusercontent.com/aws-samples/d2l-java/master/tools/colab_build.sh && bash colab_build.sh"
+build_script = "!curl -O https://raw.githubusercontent.com/deepjavalibrary/d2l-java/master/tools/colab_build.sh && bash colab_build.sh"
 script_constructor = {"cell_type": "code", "metadata": {}, "outputs": [], "source": [build_script], "execution_count": None}
 
 md = [
