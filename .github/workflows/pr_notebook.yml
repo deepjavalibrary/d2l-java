@@ -31,7 +31,7 @@ jobs:
       CH8_2: "rnn-scratch.ipynb rnn-concise.ipynb bptt.ipynb"
       CH9_1: "gru.ipynb lstm.ipynb deep-rnn.ipynb"
       CH9_2: "beam-search.ipynb"
-      CH10_1: "attention-cues.ipynb nadaraya-waston.ipynb"
+      CH10_1: "attention-cues.ipynb nadaraya-watson.ipynb"
       CH11: "chapter_optimization"
       REST: "chapter_convolutional-neural-networks chapter_linear-networks utils"
     steps:
