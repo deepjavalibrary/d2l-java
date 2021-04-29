@@ -2,8 +2,8 @@ from pathlib import Path
 import glob, json
 
 constructor = {"cell_type": "markdown", "metadata": {}}
-binder_prefix = "Run this notebook online:[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/aws-samples/d2l-java/master?filepath="
-colab_prefix = "Colab: [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/aws-samples/d2l-java/blob/colab/"
+binder_prefix = "Run this notebook online:[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/deepjavalibrary/d2l-java/master?filepath="
+colab_prefix = "Colab: [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/deepjavalibrary/d2l-java/blob/colab/"
 
 for file in Path('.').glob('**/*.ipynb'):
     if not str(file).endswith("index.ipynb"):
