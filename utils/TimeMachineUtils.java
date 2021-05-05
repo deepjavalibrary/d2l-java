@@ -36,7 +36,12 @@ public class Vocab {
 
     public Vocab(String[][] tokens, int minFreq, String[] reservedTokens) {
         // Sort according to frequencies
-        LinkedHashMap<String, Integer> counter = countCorpus2D(tokens);
+        LinkedHashMap<Object, Integer> counterObject = countCorpus2D(tokens);
+        LinkedHashMap<String, Integer> counter = new LinkedHashMap<>();
+        for (Map.Entry<Object, Integer> e : counterObject.entrySet()) {
+            counter.put((String) e.getKey(), e.getValue());
+        }
+
         this.tokenFreqs = new ArrayList<Map.Entry<String, Integer>>(counter.entrySet());
         Collections.sort(
                 tokenFreqs,
@@ -82,12 +87,24 @@ public class Vocab {
         return this.tokenToIdx.getOrDefault(token, this.unk);
     }
 
-    /** Count token frequencies. */
-    public LinkedHashMap<String, Integer> countCorpus(String[] tokens) {
+    public List<String> toTokens(List<Integer> indices) {
+        List<String> tokens = new ArrayList<>();
+        for (Integer index : indices) {
+            tokens.add(toToken(index));
+        }
+        return tokens;
+    }
 
-        LinkedHashMap<String, Integer> counter = new LinkedHashMap<>();
+    public String toToken(Integer index) {
+        return this.idxToToken.get(index);
+    }
+
+    /** Count token frequencies. */
+    public static LinkedHashMap<Object, Integer> countCorpus(Object[] tokens) {
+
+        LinkedHashMap<Object, Integer> counter = new LinkedHashMap<>();
         if (tokens.length != 0) {
-            for (String token : tokens) {
+            for (Object token : tokens) {
                 counter.put(token, counter.getOrDefault(token, 0) + 1);
             }
         }
@@ -95,8 +112,8 @@ public class Vocab {
     }
 
     /** Flatten a list of token lists into a list of tokens */
-    public LinkedHashMap<String, Integer> countCorpus2D(String[][] tokens) {
-        List<String> allTokens = new ArrayList<String>();
+    public static LinkedHashMap<Object, Integer> countCorpus2D(Object[][] tokens) {
+        List<Object> allTokens = new ArrayList<Object>();
         for (int i = 0; i < tokens.length; i++) {
             for (int j = 0; j < tokens[i].length; j++) {
                 if (tokens[i][j] != "") {
@@ -104,7 +121,7 @@ public class Vocab {
                 }
             }
         }
-        return countCorpus(allTokens.toArray(new String[0]));
+        return countCorpus(allTokens.toArray(new Object[0]));
     }
 }
 
