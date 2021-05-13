@@ -42,7 +42,7 @@ public abstract class Decoder extends AbstractBlock {
             boolean training,
             PairList<String, Object> params);
 
-    abstract public NDList beginState(NDList encOutputs);
+    abstract public NDList initState(NDList encOutputs);
 
     @Override
     public Shape[] getOutputShapes(Shape[] inputShapes) {
@@ -75,7 +75,7 @@ public class EncoderDecoder extends AbstractBlock {
         NDArray encX = inputs.get(0);
         NDArray decX = inputs.get(1);
         NDList encOutputs = this.encoder.forward(parameterStore, new NDList(encX), training, params);
-        NDList decState = this.decoder.beginState(encOutputs);
+        NDList decState = this.decoder.initState(encOutputs);
         return this.decoder.forward(parameterStore, new NDList(decX).addAll(decState), training, params);
     }
 
