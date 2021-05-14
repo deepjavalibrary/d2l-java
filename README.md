@@ -35,9 +35,13 @@ We have the following chapters implemented
 * [deep learning computation](chapter_deep-learning-computation/)
 * [convolutional-neural-networks](chapter_convolutional-neural-networks/)
 * [modern-convolutional-neural-networks](chapter_convolutional-modern/)
+* [recurrent-neural-networks](chapter_recurrent-neural-networks/)
+* [recurrent-modern](chapter_recurrent-modern/)
+* [attention-mechanisms](chapter_attention-mechanisms/)
 * [optimization algorithms](chapter_optimization/)
 * [computational performance](chapter_computational-performance/)
 * [computer vision](chapter_computer-vision/)
+* [natural-language-processing-pretraining](chapter_natural-language-processing-pretraining/)
 
 ## About Deep Java Library
 
