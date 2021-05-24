@@ -31,7 +31,7 @@ jobs:
       CH8_2: "rnn-scratch.ipynb rnn-concise.ipynb bptt.ipynb"
       CH9_1: "gru.ipynb lstm.ipynb deep-rnn.ipynb"
       CH9_2: "bi-rnn.ipynb encoder_decoder.ipynb beam-search.ipynb beam-search.ipynb"
-      CH10_1: "attention-cues.ipynb nadaraya-waston.ipynb attention-scoring-functions.ipynb"
+      CH10_1: "attention-cues.ipynb nadaraya-watson.ipynb attention-scoring-functions.ipynb"
       CH10_2: "multihead-attention.ipynb"
       CH11: "chapter_optimization"
       CH14: "word2vec.ipynb approx-training.ipynb subword-embedding.ipynb"
