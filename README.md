@@ -6,14 +6,14 @@ We have adapted the book to to use Java and the [Deep Java Library(DJL)](https:/
 
 All the notebook here can be downloaded and run using Java Kernel. We also compiled the book into a [website](https://d2l.djl.ai).
 
-This project is currently being developed and maintained by AWS and the [DJL community](https://github.com/awslabs/djl).
+This project is currently being developed and maintained by AWS and the [DJL community](https://github.com/deepjavalibrary/djl).
 
 ## How to run Jupyter Notebook in Java
 
 ### Online
-You can run online by clicking: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/aws-samples/d2l-java/master?urlpath=lab)
+You can run online by clicking: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/deepjavalibrary/d2l-java/master?urlpath=lab)
 
-Or Colab: [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/aws-samples/d2l-java/blob/colab/)
+Or Colab: [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/deepjavalibrary/d2l-java/blob/colab/)
 
 ### Local
 Please follow the instruction [here](https://d2l.djl.ai/chapter_installation/index.html) for how to run notebook using Java kernel.
@@ -35,12 +35,16 @@ We have the following chapters implemented
 * [deep learning computation](chapter_deep-learning-computation/)
 * [convolutional-neural-networks](chapter_convolutional-neural-networks/)
 * [modern-convolutional-neural-networks](chapter_convolutional-modern/)
+* [recurrent-neural-networks](chapter_recurrent-neural-networks/)
+* [recurrent-modern](chapter_recurrent-modern/)
+* [attention-mechanisms](chapter_attention-mechanisms/)
 * [optimization algorithms](chapter_optimization/)
 * [computational performance](chapter_computational-performance/)
 * [computer vision](chapter_computer-vision/)
+* [natural-language-processing-pretraining](chapter_natural-language-processing-pretraining/)
 
 ## About Deep Java Library
 
 [Deep Java Library (DJL)](https://djl.ai) is a Deep Learning Framework written in Java, supporting both training and inference. DJL is built on top of modern Deep Learning frameworks (TenserFlow, PyTorch, MXNet, etc). You can easily use DJL to train your model or deploy your favorite models from a variety of engines without any additional conversion. It contains a powerful ModelZoo design that allows you to manage trained models and load them in a single line. The built-in ModelZoo currently supports more than 70 pre-trained and ready to use models from GluonCV, HuggingFace, TorchHub and Keras.
 
-Follow our [GitHub](https://github.com/awslabs/djl/tree/master/docs), [demo repository](https://github.com/aws-samples/djl-demo), [Slack channel](https://join.slack.com/t/deepjavalibrary/shared_invite/zt-ar91gjkz-qbXhr1l~LFGEIEeGBibT7w) and [twitter](https://twitter.com/deepjavalibrary) for more documentation and examples of DJL!
+Follow our [GitHub](https://github.com/deepjavalibrary/djl/tree/master/docs), [demo repository](https://github.com/deepjavalibrary/djl-demo), [Slack channel](https://join.slack.com/t/deepjavalibrary/shared_invite/zt-ar91gjkz-qbXhr1l~LFGEIEeGBibT7w) and [twitter](https://twitter.com/deepjavalibrary) for more documentation and examples of DJL!
