@@ -36,9 +36,9 @@ public class Vocab {
 
     public Vocab(String[][] tokens, int minFreq, String[] reservedTokens) {
         // Sort according to frequencies
-        LinkedHashMap<Object, Integer> counterObject = countCorpus2D(tokens);
+        LinkedHashMap<?, Integer> counterObject = countCorpus2D(tokens);
         LinkedHashMap<String, Integer> counter = new LinkedHashMap<>();
-        for (Map.Entry<Object, Integer> e : counterObject.entrySet()) {
+        for (Map.Entry<?, Integer> e : counterObject.entrySet()) {
             counter.put((String) e.getKey(), e.getValue());
         }
 
@@ -100,11 +100,11 @@ public class Vocab {
     }
 
     /** Count token frequencies. */
-    public static LinkedHashMap<Object, Integer> countCorpus(Object[] tokens) {
+    public static <T> LinkedHashMap<T, Integer> countCorpus(T[] tokens) {
 
-        LinkedHashMap<Object, Integer> counter = new LinkedHashMap<>();
+        LinkedHashMap<T, Integer> counter = new LinkedHashMap<>();
         if (tokens.length != 0) {
-            for (Object token : tokens) {
+            for (T token : tokens) {
                 counter.put(token, counter.getOrDefault(token, 0) + 1);
             }
         }
@@ -112,8 +112,8 @@ public class Vocab {
     }
 
     /** Flatten a list of token lists into a list of tokens */
-    public static LinkedHashMap<Object, Integer> countCorpus2D(Object[][] tokens) {
-        List<Object> allTokens = new ArrayList<Object>();
+    public static <T> LinkedHashMap<T, Integer> countCorpus2D(T[][] tokens) {
+        List<T> allTokens = new ArrayList<T>();
         for (int i = 0; i < tokens.length; i++) {
             for (int j = 0; j < tokens[i].length; j++) {
                 if (tokens[i][j] != "") {
@@ -121,7 +121,7 @@ public class Vocab {
                 }
             }
         }
-        return countCorpus(allTokens.toArray(new Object[0]));
+        return countCorpus(allTokens.toArray((T[]) new Object[0]));
     }
 }
 
