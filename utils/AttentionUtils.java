@@ -6,7 +6,6 @@ import ai.djl.nn.Parameter;
 import ai.djl.nn.core.Linear;
 import ai.djl.nn.norm.Dropout;
 import ai.djl.training.ParameterStore;
-import ai.djl.training.initializer.UniformInitializer;
 import ai.djl.util.PairList;
 import ai.djl.ndarray.index.NDIndex;
 
@@ -71,7 +70,6 @@ public class DotProductAttention extends AbstractBlock {
 
         this.dropout = Dropout.builder().optRate(dropout).build();
         this.addChildBlock("dropout", this.dropout);
-        this.dropout.setInitializer(new UniformInitializer(0.07f), Parameter.Type.WEIGHT);
     }
 
     @Override
@@ -128,24 +126,19 @@ public class MultiHeadAttention extends AbstractBlock {
         attention = new DotProductAttention(dropout);
 
         this.W_q = Linear.builder().setUnits(numHiddens).optBias(useBias).build();
-        this.W_q.setInitializer(new UniformInitializer(0.07f), Parameter.Type.WEIGHT);
         this.addChildBlock("W_q", this.W_q);
 
         this.W_k = Linear.builder().setUnits(numHiddens).optBias(useBias).build();
-        this.W_k.setInitializer(new UniformInitializer(0.07f), Parameter.Type.WEIGHT);
         this.addChildBlock("W_k", this.W_k);
 
         this.W_v = Linear.builder().setUnits(numHiddens).optBias(useBias).build();
-        this.W_v.setInitializer(new UniformInitializer(0.07f), Parameter.Type.WEIGHT);
         this.addChildBlock("W_v", this.W_v);
 
         this.W_o = Linear.builder().setUnits(numHiddens).optBias(useBias).build();
-        this.W_o.setInitializer(new UniformInitializer(0.07f), Parameter.Type.WEIGHT);
         this.addChildBlock("W_o", this.W_o);
 
         this.dropout = Dropout.builder().optRate(dropout).build();
         this.addChildBlock("dropout", this.dropout);
-        this.dropout.setInitializer(new UniformInitializer(0.07f), Parameter.Type.WEIGHT);
     }
 
     @Override
@@ -223,7 +216,6 @@ public class PositionalEncoding extends AbstractBlock {
 
         this.dropout = Dropout.builder().optRate(dropout).build();
         this.addChildBlock("dropout", this.dropout);
-        this.dropout.setInitializer(new UniformInitializer(0.07f), Parameter.Type.WEIGHT);
 
         // Create a long enough `P`
         this.P = manager.zeros(new Shape(1, maxLen, numHiddens));
