@@ -33,7 +33,7 @@ jobs:
       CH9_2: "bi-rnn.ipynb encoder_decoder.ipynb beam-search.ipynb beam-search.ipynb"
       CH10_1: "attention-cues.ipynb nadaraya-watson.ipynb attention-scoring-functions.ipynb"
       CH11: "chapter_optimization"
-      CH14: "word2vec.ipynb approx-training.ipynb word-embedding-dataset.ipynb subword-embedding.ipynb"
+      CH14: "word2vec.ipynb approx-training.ipynb word-embedding-dataset.ipynb glove.ipynb subword-embedding.ipynb"
       REST: "chapter_convolutional-neural-networks chapter_linear-networks utils"
     steps:
       - uses: actions/checkout@v1
