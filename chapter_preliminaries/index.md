@@ -1,50 +1,18 @@
-#  Preliminaries
+#  预备知识
 :label:`chap_preliminaries`
 
-To get started with deep learning,
-we will need to develop a few basic skills.
-All machine learning is concerned
-with extracting information from data.
-So we will begin by learning the practical skills
-for storing, manipulating, and preprocessing data.
+要开始深度学习课程的学习，我们需要掌握一些基本技能。所有的机器学习方法都涉及从数据中提取信息。因此，我们首先将学习一些实用技能，包括存储、操作和预处理数据。
 
-Moreover, machine learning typically requires
-working with large datasets, which we can think of as tables,
-where the rows correspond to examples
-and the columns correspond to attributes.
-Linear algebra gives us a powerful set of techniques
-for working with tabular data.
-We will not go too far into the weeds but rather focus on the basic
-of matrix operations and their implementation.
+机器学习通常需要处理大型数据集。我们可以将数据集视为表，其中表的行对应于样本，列对应于属性。线性代数为我们提供了一些用来处理表格数据的技术。我们不会太深入细节，而是将重点放在矩阵运算的基本原理及其实现上。
 
-Additionally, deep learning is all about optimization.
-We have a model with some parameters and
-we want to find those that fit our data *the best*.
-Determining which way to move each parameter at each step of an algorithm
-requires a little bit of calculus, which will be briefly introduced.
-Fortunately, the `autograd` package automatically computes differentiation for us,
-and we will cover it next.
+深度学习是关于优化的。我们有一个带有参数的模型，我们想要找到那些能拟合数据的最好模型。在算法的每个步骤中，决定以何种方式调整参数需要一点微积分知识。在本节中将简要介绍这些知识。幸运的是，`autograd`包会自动为我们计算微分，在本节中我们也将介绍它。
 
-Next, machine learning is concerned with making predictions:
-what is the likely value of some unknown attribute,
-given the information that we observe?
-To reason rigorously under uncertainty
-we will need to invoke the language of probability.
+接下来，机器学习涉及如何做出预测：给定我们观察到的信息，某些未知属性的可能值是多少？要在不确定的情况下进行严格的推理，我们需要引用概率语言。
 
-In the end, the official documentation provides
-plenty of descriptions and examples that are beyond this book.
-To conclude the chapter, we will show you how to look up documentation for
-the needed information.
+最后，官方文档提供了本书之外的大量描述和示例。在本章的结尾，我们将向你展示如何在文档中查找所需信息。
 
-This book has kept the mathematical content to the minimum necessary
-to get a proper understanding of deep learning.
-However, it does not mean that
-this book is mathematics free.
-Thus, this chapter provides a rapid introduction to
-basic and frequently-used mathematics to allow anyone to understand
-at least *most* of the mathematical content of the book.
-If you wish to understand *all* of the mathematical content,
-further reviewing the [online appendix on mathematics](https://d2l.ai/chapter_appendix-mathematics-for-deep-learning/index.html) should be sufficient.
+这本书将对数学的要求保持在正确理解深度学习所需的最低限度。然而，这并不意味着这本书是没有数学的。
+因此，本章提供了基本且常用的数学知识的快速介绍，使任何人能够至少理解书中的大部分数学内容。如果你希望理解全部的数学内容，进一步学习[数学的在线附录](https://d2l.ai/chapter_appendix-mathematics-for-deep-learning/index.html)就足够了。
 
 ```toc
 :maxdepth: 2
@@ -57,4 +25,3 @@ autograd
 probability
 lookup-api
 ```
-
