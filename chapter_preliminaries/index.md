@@ -23,4 +23,5 @@ linear-algebra
 calculus
 autograd
 probability
+lookup-api
 ```
