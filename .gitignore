@@ -2,3 +2,5 @@
 testoutput/
 .ipynb_checkpoints/
 .idea
+models
+data
