@@ -55,6 +55,8 @@ jobs:
           ./gradlew installKernel
       - name: test Notebook
         run: |
+          export DATASET_LIMIT=512
+          export MAX_EPOCH=2
           bash test_notebook.sh $${{ matrix.group }}
       - name: generated Notebook in html
         uses: actions/upload-artifact@v1

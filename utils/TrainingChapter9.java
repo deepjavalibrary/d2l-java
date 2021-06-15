@@ -4,6 +4,7 @@ import ai.djl.nn.Parameter;
 import ai.djl.util.Pair;
 
 public class TrainingChapter9 {
+
     /** Clip the gradient. */
     public static void gradClipping(Object net, int theta, NDManager manager) {
         double result = 0;
@@ -26,4 +27,3 @@ public class TrainingChapter9 {
         }
     }
 }
-

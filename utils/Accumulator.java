@@ -3,9 +3,10 @@ import java.util.Arrays;
 /**
  * Sums a list of numbers over time.
  *
- * Defined in Ch 3.6 Softmax Reg. from Scratch
+ * <p>Defined in Ch 3.6 Softmax Reg. from Scratch
  */
 public class Accumulator {
+
     float[] data;
 
     /**

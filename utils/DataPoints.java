@@ -1,9 +1,10 @@
-import ai.djl.Device;
-import ai.djl.ndarray.*;
+import ai.djl.ndarray.NDArray;
+import ai.djl.ndarray.NDManager;
 import ai.djl.ndarray.types.DataType;
 import ai.djl.ndarray.types.Shape;
 
-class DataPoints {
+public class DataPoints {
+
     private NDArray X, y;
 
     public DataPoints(NDArray X, NDArray y) {
@@ -24,8 +25,7 @@ class DataPoints {
         NDArray X = manager.randomNormal(new Shape(numExamples, w.size()));
         NDArray y = X.dot(w).add(b);
         // Add noise
-        y = y.add(manager.randomNormal(0, 0.01f, y.getShape(), DataType.FLOAT32, Device.defaultDevice()));
+        y = y.add(manager.randomNormal(0, 0.01f, y.getShape(), DataType.FLOAT32));
         return new DataPoints(X, y);
     }
 }
-

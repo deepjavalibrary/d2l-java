@@ -5,7 +5,6 @@ import ai.djl.ndarray.types.DataType;
 import ai.djl.ndarray.types.Shape;
 import ai.djl.training.dataset.ArrayDataset;
 import ai.djl.util.Pair;
-
 import java.io.*;
 import java.net.URL;
 import java.nio.file.*;
@@ -14,7 +13,7 @@ import java.util.stream.IntStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-%load ../utils/TimeMachineUtils.java
+// %load ../utils/TimeMachineUtils.java
 
 public class NMT {
     public static StringBuilder readDataNMT() throws IOException {
@@ -42,8 +41,8 @@ public class NMT {
             lines = in.lines().toArray(String[]::new);
         }
         StringBuilder output = new StringBuilder();
-        for (int i = 0; i < lines.length; i++) {
-            output.append(lines[i] + "\n");
+        for (String line : lines) {
+            output.append(line).append('\n');
         }
         return output;
     }
@@ -98,7 +97,7 @@ public class NMT {
         int[] line = Arrays.stream(integerLine).mapToInt(i -> i).toArray();
         if (line.length > numSteps) return Arrays.copyOfRange(line, 0, numSteps);
         int[] paddingTokenArr = new int[numSteps - line.length]; // Pad
-        for (int i = 0; i < paddingTokenArr.length; i++) paddingTokenArr[i] = paddingToken;
+        Arrays.fill(paddingTokenArr, paddingToken);
 
         return IntStream.concat(Arrays.stream(line), Arrays.stream(paddingTokenArr)).toArray();
     }
@@ -107,14 +106,13 @@ public class NMT {
             ArrayList<String[]> lines, Vocab vocab, int numSteps, NDManager manager) {
         /* Transform text sequences of machine translation into minibatches. */
         ArrayList<Integer[]> linesIntArr = new ArrayList<>();
-        for (int i = 0; i < lines.size(); i++) {
-            linesIntArr.add(vocab.getIdxs(lines.get(i)));
+        for (String[] strings : lines) {
+            linesIntArr.add(vocab.getIdxs(strings));
         }
         for (int i = 0; i < linesIntArr.size(); i++) {
-            ArrayList<Integer> temp = new ArrayList<>();
-            temp.addAll(Arrays.asList(linesIntArr.get(i)));
+            ArrayList<Integer> temp = new ArrayList<>(Arrays.asList(linesIntArr.get(i)));
             temp.add(vocab.getIdx("<eos>"));
-            linesIntArr.set(i, temp.stream().toArray(n -> new Integer[n]));
+            linesIntArr.set(i, temp.toArray(new Integer[0]));
         }
 
         NDArray arr = manager.create(new Shape(linesIntArr.size(), numSteps), DataType.INT32);
@@ -138,12 +136,12 @@ public class NMT {
         ArrayList<String[]> target = pair.getValue();
         Vocab srcVocab =
                 new Vocab(
-                        source.stream().toArray(String[][]::new),
+                        source.toArray(new String[0][]),
                         2,
                         new String[] {"<pad>", "<bos>", "<eos>"});
         Vocab tgtVocab =
                 new Vocab(
-                        target.stream().toArray(String[][]::new),
+                        target.toArray(new String[0][]),
                         2,
                         new String[] {"<pad>", "<bos>", "<eos>"});
 

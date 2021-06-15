@@ -1,13 +1,16 @@
+import tech.tablesaw.api.FloatColumn;
 import tech.tablesaw.api.Row;
-import tech.tablesaw.api.ColumnType;
-import tech.tablesaw.columns.Column;
+import tech.tablesaw.api.StringColumn;
+import tech.tablesaw.api.Table;
+import tech.tablesaw.plotly.api.LinePlot;
 
 /**
  * Animates a graph with real-time data.
  *
- * Defined in Ch 3.6 Softmax Reg. from Scratch
+ * <p>Defined in Ch 3.6 Softmax Reg. from Scratch
  */
 public class Animator {
+
     private String id; // Id reference of graph(for updating graph)
     private Table data; // Data Points
 
@@ -15,12 +18,12 @@ public class Animator {
         id = "";
 
         // Incrementally plot data
-        data = Table.create("Data")
-                .addColumns(
-                        FloatColumn.create("epoch", new float[]{}),
-                        FloatColumn.create("value", new float[]{}),
-                        StringColumn.create("metric", new String[]{})
-                );
+        data =
+                Table.create("Data")
+                        .addColumns(
+                                FloatColumn.create("epoch", new float[] {}),
+                                FloatColumn.create("value", new float[] {}),
+                                StringColumn.create("metric", new String[] {}));
     }
 
     // Add a single metric to the table
@@ -52,18 +55,5 @@ public class Animator {
     // Update the graph
     public void update() {
         updateDisplay(id, LinePlot.create("", data, "epoch", "value", "metric"));
-    }
-
-    // Returns the column at the given index
-    // if it is a float column
-    // Otherwise returns null
-    public float[] getY(Table t, int index) {
-        Column c = t.column(index);
-        if (c.type() == ColumnType.FLOAT) {
-            float[] newArray = new float[c.size()];
-            System.arraycopy(c.asList().toArray(), 0, newArray, 0, c.size());
-            return newArray;
-        }
-        return null;
     }
 }

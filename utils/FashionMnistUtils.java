@@ -1,36 +1,46 @@
+import ai.djl.basicdataset.cv.classification.FashionMnist;
 import ai.djl.ndarray.*;
 import ai.djl.training.dataset.*;
-import ai.djl.basicdataset.FashionMnist;
 import ai.djl.translate.TranslateException;
-
-import java.awt.image.BufferedImage;
-import java.awt.Graphics2D;
-import java.awt.Graphics;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
 import javax.swing.BoxLayout;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class FashionMnistUtils {
 
-    public static ArrayDataset getDataset(Dataset.Usage usage,
-                                          int batchSize,
-                                          boolean randomShuffle) throws IOException, TranslateException {
-        FashionMnist fashionMnist = FashionMnist.builder().optUsage(usage)
-                .setSampling(batchSize, randomShuffle)
-                .build();
+    public static ArrayDataset getDataset(Dataset.Usage usage, int batchSize, boolean randomShuffle)
+            throws IOException, TranslateException {
+        FashionMnist fashionMnist =
+                FashionMnist.builder()
+                        .optUsage(usage)
+                        .setSampling(batchSize, randomShuffle)
+                        .build();
         fashionMnist.prepare();
         return fashionMnist;
     }
 
     public static String[] getFashionMnistLabels(int[] labelIndices) {
-        String[] textLabels = {"t-shirt", "trouser", "pullover", "dress", "coat",
-                "sandal", "shirt", "sneaker", "bag", "ankle boot"};
+        String[] textLabels = {
+            "t-shirt",
+            "trouser",
+            "pullover",
+            "dress",
+            "coat",
+            "sandal",
+            "shirt",
+            "sneaker",
+            "bag",
+            "ankle boot"
+        };
         String[] convertedLabels = new String[labelIndices.length];
         for (int i = 0; i < labelIndices.length; i++) {
             convertedLabels[i] = textLabels[labelIndices[i]];
@@ -39,8 +49,18 @@ public class FashionMnistUtils {
     }
 
     public static String getFashionMnistLabel(int labelIndice) {
-        String[] textLabels = {"t-shirt", "trouser", "pullover", "dress", "coat",
-                "sandal", "shirt", "sneaker", "bag", "ankle boot"};
+        String[] textLabels = {
+            "t-shirt",
+            "trouser",
+            "pullover",
+            "dress",
+            "coat",
+            "sandal",
+            "shirt",
+            "sneaker",
+            "bag",
+            "ankle boot"
+        };
         return textLabels[labelIndice];
     }
 
@@ -84,10 +104,8 @@ public class FashionMnistUtils {
         }
     }
 
-    public static void showImages(ArrayDataset dataset,
-                                  int number, int WIDTH, int HEIGHT, int SCALE,
-                                  NDManager manager)
-            throws IOException, TranslateException {
+    public static void showImages(
+            ArrayDataset dataset, int number, int WIDTH, int HEIGHT, int SCALE, NDManager manager) {
         // Plot a list of images
         JFrame frame = new JFrame("Fashion Mnist");
         for (int record = 0; record < number; record++) {
@@ -97,7 +115,7 @@ public class FashionMnistUtils {
             Graphics2D g = (Graphics2D) img.getGraphics();
             for (int i = 0; i < WIDTH; i++) {
                 for (int j = 0; j < HEIGHT; j++) {
-                    float c = X.getFloat(j, i) / 255;  // scale down to between 0 and 1
+                    float c = X.getFloat(j, i) / 255; // scale down to between 0 and 1
                     g.setColor(new Color(c, c, c)); // set as a gray color
                     g.fillRect(i, j, 1, 1);
                 }
@@ -113,10 +131,13 @@ public class FashionMnistUtils {
         frame.setVisible(true);
     }
 
-    public static void showImages(ArrayDataset dataset, int[] predLabels,
-                                  int WIDTH, int HEIGHT, int SCALE,
-                                  NDManager manager)
-            throws IOException, TranslateException {
+    public static void showImages(
+            ArrayDataset dataset,
+            int[] predLabels,
+            int WIDTH,
+            int HEIGHT,
+            int SCALE,
+            NDManager manager) {
         // Plot a list of images
         JFrame frame = new JFrame("Fashion Mnist");
         for (int record = 0; record < predLabels.length; record++) {
@@ -126,14 +147,16 @@ public class FashionMnistUtils {
             Graphics2D g = (Graphics2D) img.getGraphics();
             for (int i = 0; i < WIDTH; i++) {
                 for (int j = 0; j < HEIGHT; j++) {
-                    float c = X.getFloat(j, i) / 255;  // scale down to between 0 and 1
+                    float c = X.getFloat(j, i) / 255; // scale down to between 0 and 1
                     g.setColor(new Color(c, c, c)); // set as a gray color
                     g.fillRect(i, j, 1, 1);
                 }
             }
             JPanel panel = new ImagePanel(SCALE, img);
             panel.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
-            JPanel container = new Container(getFashionMnistLabel(y), getFashionMnistLabel(predLabels[record]));
+            JPanel container =
+                    new Container(
+                            getFashionMnistLabel(y), getFashionMnistLabel(predLabels[record]));
             container.add(panel);
             frame.getContentPane().add(container);
         }
@@ -142,5 +165,3 @@ public class FashionMnistUtils {
         frame.setVisible(true);
     }
 }
-
-
