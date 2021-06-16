@@ -1,5 +1,6 @@
-import ai.djl.Model;
 import ai.djl.Device;
+import ai.djl.Model;
+import ai.djl.basicdataset.tabular.AirfoilRandomAccess;
 import ai.djl.engine.Engine;
 import ai.djl.metric.Metrics;
 import ai.djl.ndarray.NDArray;
@@ -7,9 +8,13 @@ import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.NDManager;
 import ai.djl.ndarray.types.DataType;
 import ai.djl.ndarray.types.Shape;
+import ai.djl.nn.Parameter;
 import ai.djl.nn.SequentialBlock;
 import ai.djl.nn.core.Linear;
+import ai.djl.training.DefaultTrainingConfig;
+import ai.djl.training.EasyTrain;
 import ai.djl.training.GradientCollector;
+import ai.djl.training.Trainer;
 import ai.djl.training.dataset.Batch;
 import ai.djl.training.dataset.Dataset;
 import ai.djl.training.evaluator.Accuracy;
@@ -17,20 +22,16 @@ import ai.djl.training.initializer.NormalInitializer;
 import ai.djl.training.listener.TrainingListener;
 import ai.djl.training.loss.Loss;
 import ai.djl.training.optimizer.Optimizer;
+import ai.djl.translate.TranslateException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.plotly.api.LinePlot;
-import ai.djl.training.DefaultTrainingConfig;
-import ai.djl.training.EasyTrain;
-import ai.djl.training.Trainer;
-import java.io.IOException;
-import ai.djl.translate.TranslateException;
-import ai.djl.basicdataset.AirfoilRandomAccess;
-
-import java.util.ArrayList;
-import java.util.Map;
 
 public class TrainingChapter11 {
+
     /* Ch11 Optimization */
     public static float[] arrayListToFloat(ArrayList<Double> arrayList) {
         float[] ret = new float[arrayList.size()];
@@ -42,9 +43,8 @@ public class TrainingChapter11 {
     }
 
     @FunctionalInterface
-    public static interface TrainerConsumer {
+    public interface TrainerConsumer {
         void train(NDList params, NDList states, Map<String, Float> hyperparams);
-
     }
 
     public static class LossTime {
@@ -57,9 +57,7 @@ public class TrainingChapter11 {
         }
     }
 
-    /**
-     * Gets the airfoil dataset
-     */
+    /** Gets the airfoil dataset */
     public static AirfoilRandomAccess getDataCh11(int batchSize, int n)
             throws IOException, TranslateException {
         // Load data
@@ -67,23 +65,17 @@ public class TrainingChapter11 {
                 AirfoilRandomAccess.builder()
                         .optUsage(Dataset.Usage.TRAIN)
                         .setSampling(batchSize, true)
+                        .optNormalize(true)
+                        .optLimit(n)
                         .build();
-        // Select Features
-        airfoil.addAllFeatures();
         // Prepare Data
         airfoil.prepare();
-        // Select first n cases
-        airfoil.selectFirstN(n);
-        // Remove the mean and rescale variance to 1 for all features
-        airfoil.whitenAll();
         return airfoil;
     }
 
-    /**
-     *  Evaluate the loss of a model on the given dataset
-     */
+    /** Evaluate the loss of a model on the given dataset */
     public static float evaluateLoss(Iterable<Batch> dataIterator, NDArray w, NDArray b) {
-        Accumulator metric = new Accumulator(2);  // sumLoss, numExamples
+        Accumulator metric = new Accumulator(2); // sumLoss, numExamples
 
         for (Batch batch : dataIterator) {
             NDArray X = batch.getData().head();
@@ -91,32 +83,35 @@ public class TrainingChapter11 {
             NDArray yHat = Training.linreg(X, w, b);
             float lossSum = Training.squaredLoss(yHat, y).sum().getFloat();
 
-            metric.add(new float[]{lossSum, (float) y.size()});
+            metric.add(new float[] {lossSum, (float) y.size()});
             batch.close();
         }
         return metric.get(0) / metric.get(1);
     }
 
     public static void plotLossEpoch(float[] loss, float[] epoch) {
-        Table data = Table.create("data")
-                .addColumns(
-                        DoubleColumn.create("epoch", Functions.floatToDoubleArray(epoch)),
-                        DoubleColumn.create("loss", Functions.floatToDoubleArray(loss))
-                );
+        Table data =
+                Table.create("data")
+                        .addColumns(
+                                DoubleColumn.create("epoch", Functions.floatToDoubleArray(epoch)),
+                                DoubleColumn.create("loss", Functions.floatToDoubleArray(loss)));
         display(LinePlot.create("loss vs. epoch", data, "epoch", "loss"));
     }
 
-    public static LossTime trainCh11(TrainerConsumer trainer,
-                                     NDList states, Map<String,
-            Float> hyperparams,
-                                     AirfoilRandomAccess dataset,
-                                     int featureDim, int numEpochs) throws IOException, TranslateException {
+    public static LossTime trainCh11(
+            TrainerConsumer trainer,
+            NDList states,
+            Map<String, Float> hyperparams,
+            AirfoilRandomAccess dataset,
+            int featureDim,
+            int numEpochs)
+            throws IOException, TranslateException {
         NDManager manager = NDManager.newBaseManager();
         NDArray w = manager.randomNormal(0, 0.01f, new Shape(featureDim, 1), DataType.FLOAT32);
         NDArray b = manager.zeros(new Shape(1));
 
-        w.attachGradient();
-        b.attachGradient();
+        w.setRequiresGradient(true);
+        b.setRequiresGradient(true);
 
         NDList params = new NDList(w, b);
         int n = 0;
@@ -129,7 +124,7 @@ public class TrainingChapter11 {
 
         for (int i = 0; i < numEpochs; i++) {
             for (Batch batch : dataset.getData(manager)) {
-                int len = (int) dataset.size() / batch.getSize();  // number of batches
+                int len = (int) dataset.size() / batch.getSize(); // number of batches
                 NDArray X = batch.getData().head();
                 NDArray y = batch.getLabels().head();
 
@@ -160,26 +155,27 @@ public class TrainingChapter11 {
         return new LossTime(arrayListToFloat(loss), arrayListToFloat(stopWatch.cumsum()));
     }
 
-    public static void trainConciseCh11(Optimizer sgd, AirfoilRandomAccess dataset,
-                                        int numEpochs) throws IOException, TranslateException {
+    public static void trainConciseCh11(Optimizer sgd, AirfoilRandomAccess dataset, int numEpochs)
+            throws IOException, TranslateException {
         // Initialization
         NDManager manager = NDManager.newBaseManager();
 
         SequentialBlock net = new SequentialBlock();
         Linear linear = Linear.builder().setUnits(1).build();
         net.add(linear);
-        net.setInitializer(new NormalInitializer());
+        net.setInitializer(new NormalInitializer(), Parameter.Type.WEIGHT);
 
         Model model = Model.newInstance("concise implementation");
         model.setBlock(net);
 
         Loss loss = Loss.l2Loss();
 
-        DefaultTrainingConfig config = new DefaultTrainingConfig(loss)
-                .optOptimizer(sgd)
-                .optDevices(Device.getDevices(1)) // single GPU
-                .addEvaluator(new Accuracy()) // Model Accuracy
-                .addTrainingListeners(TrainingListener.Defaults.logging()); // Logging
+        DefaultTrainingConfig config =
+                new DefaultTrainingConfig(loss)
+                        .optOptimizer(sgd)
+                        .optDevices(Device.getDevices(1)) // single GPU
+                        .addEvaluator(new Accuracy()) // Model Accuracy
+                        .addTrainingListeners(TrainingListener.Defaults.logging()); // Logging
 
         Trainer trainer = model.newTrainer(config);
 
@@ -198,7 +194,7 @@ public class TrainingChapter11 {
         ArrayList<Double> epochArray = new ArrayList<>();
 
         for (Batch batch : trainer.iterateDataset(dataset)) {
-            int len = (int) dataset.size() / batch.getSize();  // number of batches
+            int len = (int) dataset.size() / batch.getSize(); // number of batches
 
             NDArray X = batch.getData().head();
             EasyTrain.trainBatch(trainer, batch);
@@ -208,9 +204,15 @@ public class TrainingChapter11 {
 
             if (n % 200 == 0) {
                 stopWatch.stop();
-                lastLoss = evaluateLoss(dataset.getData(manager), linear.getParameters().get(0).getValue().getArray()
-                                .reshape(new Shape(dataset.getFeatureArraySize(), 1)),
-                        linear.getParameters().get(1).getValue().getArray());
+                lastLoss =
+                        evaluateLoss(
+                                dataset.getData(manager),
+                                linear.getParameters()
+                                        .get(0)
+                                        .getValue()
+                                        .getArray()
+                                        .reshape(new Shape(dataset.getColumnNames().size(), 1)),
+                                linear.getParameters().get(1).getValue().getArray());
 
                 lossArray.add((double) lastLoss);
                 double lastEpoch = 1.0 * n / X.getShape().get(0) / len;

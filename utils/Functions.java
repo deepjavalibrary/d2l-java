@@ -33,40 +33,42 @@ public class Functions {
      */
     @FunctionalInterface
     public interface TriFunction<T, U, V, W> {
-        public W apply(T t, U u, V v);
+        W apply(T t, U u, V v);
     }
 
     /**
-     * Helper function to later be able to use lambda. Accepts 4 types for parameters and one
-     * for output.
+     * Helper function to later be able to use lambda. Accepts 4 types for parameters and one for
+     * output.
      */
     @FunctionalInterface
     public interface QuadFunction<T, U, V, W, R> {
-        public R apply(T t, U u, V v, W w);
+        R apply(T t, U u, V v, W w);
     }
 
     /**
-     * Helper function to later be able to use lambda. Doesn't have any type for parameters and has one type
-     * for output.
+     * Helper function to later be able to use lambda. Doesn't have any type for parameters and has
+     * one type for output.
      */
     @FunctionalInterface
     public interface SimpleFunction<T> {
-        public T apply();
+        T apply();
     }
 
     /**
-     * Helper function to later be able to use lambda. Accepts one types for parameters and uses void for return.
+     * Helper function to later be able to use lambda. Accepts one types for parameters and uses
+     * void for return.
      */
     @FunctionalInterface
     public interface voidFunction<T> {
-        public void apply(T t);
+        void apply(T t);
     }
 
     /**
-     * Helper function to later be able to use lambda. Accepts two types for parameters and uses void for return.
+     * Helper function to later be able to use lambda. Accepts two types for parameters and uses
+     * void for return.
      */
     @FunctionalInterface
     public interface voidTwoFunction<T, U> {
-        public void apply(T t, U u);
+        void apply(T t, U u);
     }
 }

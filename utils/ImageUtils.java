@@ -3,13 +3,14 @@ import ai.djl.modality.cv.output.BoundingBox;
 import ai.djl.modality.cv.output.DetectedObjects;
 import ai.djl.modality.cv.output.Rectangle;
 import ai.djl.ndarray.NDArray;
-
-import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
+import java.util.Arrays;
 import java.util.List;
+import javax.swing.*;
 
 public class ImageUtils {
+
     public static class ImagePanel extends JPanel {
         int SCALE;
         Image img;
@@ -71,10 +72,10 @@ public class ImageUtils {
             labels = new String[(int) boxes.size(0)];
             Arrays.fill(labels, "");
         }
-        
-        List<String> classNames = new ArrayList();
-        List<Double> prob = new ArrayList();
-        List<BoundingBox> boundBoxes = new ArrayList();
+
+        List<String> classNames = new ArrayList<>();
+        List<Double> prob = new ArrayList<>();
+        List<BoundingBox> boundBoxes = new ArrayList<>();
         for (int i = 0; i < boxes.size(0); i++) {
             NDArray box = boxes.get(i);
             Rectangle rect = bboxToRect(box);

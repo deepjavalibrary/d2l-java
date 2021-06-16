@@ -8,7 +8,7 @@ class StopWatch {
     private long tik;
 
     public StopWatch() {
-        times = new ArrayList();
+        times = new ArrayList<>();
         start();
     }
 
@@ -20,7 +20,7 @@ class StopWatch {
         times.add(nanoToSec(System.nanoTime() - tik));
         return times.get(times.size() - 1);
     }
-    
+
     public ArrayList<Double> getTimes() {
         return times;
     }
@@ -41,7 +41,7 @@ class StopWatch {
 
     // Return the accumulated times
     public ArrayList<Double> cumsum() {
-        ArrayList<Double> cumsumList = new ArrayList();
+        ArrayList<Double> cumsumList = new ArrayList<>();
         double currentSum = 0;
         for (Double d : times) {
             currentSum += d;
@@ -55,4 +55,3 @@ class StopWatch {
         return (double) nanosec / 1E9;
     }
 }
-
