@@ -1,6 +1,6 @@
 # 深度学习 (Java 版本 )
 
-该项目是对原始的 [Dive Into Deep Learning ](https://d2l.ai) 一书的修改，这本书是由阿斯顿·张（Aston Zhang），扎卡里·立普顿（Zachary C. Lipton），穆力，亚历克斯·J·斯莫拉（Alex J. Smola）和所有社区贡献者撰写的。  
+该项目是对原始的 [Dive Into Deep Learning ](https://d2l.ai) 一书的修改，这本书是由阿斯顿·张（Aston Zhang），扎卡里·立普顿（Zachary C. Lipton），李沐，亚历克斯·J·斯莫拉（Alex J. Smola）和所有社区贡献者撰写的。  
 原始书籍的GitHub地址: [https://github.com/d2l-ai/d2l-en](https://github.com/d2l-ai/d2l-en) 。
 我们改编了本书以使用Java和[Deep Java Library(DJL)](https://djl.ai)。
 
@@ -34,12 +34,12 @@
 * [第五章 深度学习计算](chapter_deep-learning-computation/)
 * [第六章 卷积神经网络](chapter_convolutional-neural-networks/)
 * [第七章 现代卷积神经网络](chapter_convolutional-modern/)
-* [recurrent-neural-networks](chapter_recurrent-neural-networks/)
-* [recurrent-modern](chapter_recurrent-modern/)
-* [attention-mechanisms](chapter_attention-mechanisms/)
-* [第八章 优化算法](chapter_optimization/)
-* [第九章 计算性能](chapter_computational-performance/)
-* [第十章 计算机视觉](chapter_computer-vision/)
+* [第八章 循环神经网络](chapter_recurrent-neural-networks/)
+* [第九章 现代循环神经网络](chapter_recurrent-modern/)
+* [第十章 注意力机制](chapter_attention-mechanisms/)
+* [十一章 优化算法](chapter_optimization/)
+* [第十二章 计算性能](chapter_computational-performance/)
+* [第十三章 计算机视觉](chapter_computer-vision/)
 
 ## 关于Deep Java Library
 
