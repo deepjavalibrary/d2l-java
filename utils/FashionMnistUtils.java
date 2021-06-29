@@ -17,17 +17,6 @@ import javax.swing.JPanel;
 
 public class FashionMnistUtils {
 
-    public static ArrayDataset getDataset(Dataset.Usage usage, int batchSize, boolean randomShuffle)
-            throws IOException, TranslateException {
-        FashionMnist fashionMnist =
-                FashionMnist.builder()
-                        .optUsage(usage)
-                        .setSampling(batchSize, randomShuffle)
-                        .build();
-        fashionMnist.prepare();
-        return fashionMnist;
-    }
-
     public static String[] getFashionMnistLabels(int[] labelIndices) {
         String[] textLabels = {
             "t-shirt",
