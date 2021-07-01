@@ -8,8 +8,8 @@
 
 echo "Try to fetch daily backup"
 date=$(date '+%Y-%m-%d')
-BRANCH="${BRANCH:-en}"
-aws s3 sync s3://d2l-java-notebook/${BRANCH}/$date .
+D2L_LANG="${D2L_LANG:-en}"
+aws s3 sync s3://d2l-java-notebook/${D2L_LANG}/$date .
 
 set -e
 
@@ -44,7 +44,7 @@ function eval {
     jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=5400 --output temp "$1"
     mkdir -p $output_dir/$dir
     mv "$dir/temp.ipynb" "$output_dir/$1"
-    aws s3 cp "$output_dir/$1" "s3://d2l-java-notebook/${BRANCH}/$date/$output_dir/$1"
+    aws s3 cp "$output_dir/$1" "s3://d2l-java-notebook/${D2L_LANG}/$date/$output_dir/$1"
 }
 
 for f in **/*.ipynb
