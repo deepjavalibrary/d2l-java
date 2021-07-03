@@ -1,23 +1,14 @@
-# Multilayer Perceptrons
+# 多层感知机
 :label:`chap_perceptrons`
 
-In this chapter, we will introduce your first truly *deep* network.
-The simplest deep networks are called multilayer perceptrons,
-and they consist of many layers of neurons
-each fully connected to those in the layer below
-(from which they receive input)
-and those above (which they, in turn, influence).
-When we train high-capacity models we run the risk of overfitting.
-Thus, we will need to provide your first rigorous introduction
-to the notions of overfitting, underfitting, and capacity control.
-To help you combat these problems,
-we will introduce regularization techniques such as dropout and weight decay.
-We will also discuss issues relating to numerical stability and parameter initialization that are key to successfully training deep networks.
-Throughout, we focus on applying models to real data,
-aiming to give the reader a firm grasp not just of the concepts
-but also of the practice of using deep networks.
-We put matters relating to the computational performance,
-scalability and efficiency of our models to subsequent chapters.
+在本章中，我们将介绍你的第一个真正的*深度*网络。最简单的深度网络称为多层感知机，
+它们由多层神经元组成，每一层都与下面一层（从中接收输入）和上面一层（反过来影响当前层的神经元）
+完全相连。当我们训练大容量模型时，我们面临着过拟合的风险。因此，我们需要为你提供
+第一次严格的概念介绍，包括过拟合、欠拟合和模型选择。为了帮助你解决这些问题，
+我们将介绍权重衰减和dropout等正则化技术。我们还将讨论数值稳定性和参数初始化相关的问题，
+这些问题是成功训练深度网络的关键。在整个过程中，我们的目标不仅是让你掌握概念，
+还希望让你掌握深度网络的实践方法。在本章的最后，我们将把到目前为止所介绍的内容应用到一个真实的案例：
+房价预测。我们将有关于模型计算性能、可伸缩性和效率相关的问题放在后面的章节中讨论。
 
 ```toc
 :maxdepth: 2
