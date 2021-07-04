@@ -6,17 +6,7 @@
 # ask tablesaw to plot <img> for Sphinx to load
 # export D2L_PLOT_IMAGE=1
 
-echo "Try to fetch backup"
-COMMIT_ID=$(git rev-parse --short HEAD)
-D2L_LANG="${D2L_LANG:-en}"
-aws s3 sync s3://d2l-java-notebook/${D2L_LANG}/$COMMIT_ID .
-
 set -e
-
-if [[ $1 == clean ]]; then
-    echo "cleaning cached build"
-    rm -rf _build
-fi
 
 rm -r -f */temp.ipynb
 
@@ -29,6 +19,19 @@ cp -r img/* $output_dir/img
 cp d2l.bib $output_dir
 
 python3 tools/add_online_runner.py
+
+set +e
+echo "Try to fetch backup"
+COMMIT_ID=$(git rev-parse --short HEAD)
+D2L_LANG="${D2L_LANG:-en}"
+if [ -z "$MAX_EPOCH" ] then;
+    DATE=$(date '+%Y-%m-%d')
+    S3_PREFIX="$D2L_LANG/$DATE"
+else
+    S3_PREFIX="$D2L_LANG/$COMMIT_ID"
+fi
+aws s3 sync "s3://d2l-java-notebook/${S3_PREFIX}" .
+set -e
 
 d2lbook build eval
 
@@ -44,7 +47,7 @@ function eval {
     jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=5400 --output temp "$1"
     mkdir -p $output_dir/$dir
     mv "$dir/temp.ipynb" "$output_dir/$1"
-    aws s3 cp "$output_dir/$1" "s3://d2l-java-notebook/${D2L_LANG}/$COMMIT_ID/$output_dir/$1"
+    aws s3 cp "$output_dir/$1" "s3://d2l-java-notebook/${S3_PREFIX}/$output_dir/$1"
 }
 
 for f in **/*.ipynb
