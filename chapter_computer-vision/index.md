@@ -1,9 +1,19 @@
-# Computer Vision
+# 计算机视觉
 :label:`chap_cv`
 
-Many applications in the area of computer vision are closely related to our daily lives, now and in the future, whether medical diagnostics, driverless vehicles, camera monitoring, or smart filters. In recent years, deep learning technology has greatly enhanced computer vision systems' performance. It can be said that the most advanced computer vision applications are nearly inseparable from deep learning.
+近年来，深度学习一直是提高计算机视觉系统性能的变革力量。
+无论是医疗诊断、自动驾驶车辆，还是智能滤镜、摄像头监控，许多计算机视觉领域的应用都与我们当前和未来的生活密切相关。
+可以说，最先进的计算机视觉应用程序与深度学习几乎是不可分割的。
+有鉴于此，本章将重点介绍计算机视觉领域，并探讨最近在学术界和行业中具有影响力的方法和应用。 
 
-We have introduced deep learning models commonly used in the area of computer vision in the chapter "Convolutional Neural Networks" and have practiced simple image classification tasks. In this chapter, we will introduce image augmentation and fine tuning methods and apply them to image classification. Then, we will explore various methods of object detection. After that, we will learn how to use fully convolutional networks to perform semantic segmentation on images. Then, we explain how to use style transfer technology to generate images that look like the cover of this book. Finally, we will perform practice exercises on two important computer vision datasets to review the content of this chapter and the previous chapters.
+在 :numref:`chap_cnn` 和 :numref:`chap_modern_cnn` 中，我们研究了计算机视觉中常用的各种卷积神经网络，
+并将它们应用到简单的图像分类任务中。
+本章开头，我们将介绍两种可以改进模型泛化的方法，即 *图像增广* 和 *微调*，并将它们应用于图像分类。
+由于深度神经网络可以有效地表示多个层次的图像，因此这种分层表示已成功用于各种计算机视觉任务，
+例如 *对象检测*、*图像语义分割* 和 *样式迁移*。
+秉承计算机视觉中利用分层表示的关键思想，我们将从物体检测的主要组件和技术开始，
+继而展示如何使用 *完全卷积网络* 对图像进行语义分割，然后我们将解释如何使用样式迁移技术来生成像本书封面一样的图像。
+最后在结束本章时，我们将本章和前几章的知识应用于两个流行的计算机视觉基准数据集。
 
 ```toc
 :maxdepth: 2
