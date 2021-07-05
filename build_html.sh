@@ -61,7 +61,7 @@ rm -r -f */temp.ipynb
 curl -O https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js
 
 d2lbook build rst
-cp static/frontpage/frontpage.html _build/rst/frontpage.html
+cp "static/frontpage/frontpage_$D2L_LANG.html" _build/rst/frontpage.html
 mkdir -p _build/rst/chapter_references/
 mv zreferences.rst _build/rst/chapter_references/
 d2lbook build html
