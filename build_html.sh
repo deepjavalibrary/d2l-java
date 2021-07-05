@@ -24,7 +24,7 @@ set +e
 echo "Try to fetch backup"
 COMMIT_ID=$(git rev-parse --short HEAD)
 D2L_LANG="${D2L_LANG:-en}"
-if [ -z "$MAX_EPOCH" ] then;
+if [ -z "$MAX_EPOCH" ]; then
     DATE=$(date '+%Y-%m-%d')
     S3_PREFIX="$D2L_LANG/$DATE"
 else
