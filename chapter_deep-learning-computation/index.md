@@ -1,43 +1,20 @@
-# Deep Learning Computation
+# 深度学习计算
 :label:`chap_computation`
 
-Alongside giant datasets and powerful hardware,
-great software tools have played an indispensable role
-in the rapid progress of deep learning.
-Starting with the pathbreaking Theano library released in 2007,
-flexible open-source tools have enabled researchers
-to rapidly prototype models, avoiding repetitive work
-when recycling standard components
-while still maintaining the ability to make low-level modifications.
-Over time, deep learning's libraries have evolved
-to offer increasingly coarse abstractions.
-Just as semiconductor designers went from specifying transistors
-to logical circuits to writing code,
-neural networks researchers have moved from thinking about
-the behavior of individual artificial neurons
-to conceiving of networks in terms of whole layers,
-and now often design architectures with far coarser *blocks* in mind.
+除了庞大的数据集和强大的硬件，优秀的软件工具在深度学习的快速发展中发挥了不可或缺的作用。
+从2007年发布的开创性的Theano库开始，灵活的开源工具使研究人员能够快速开发模型原型，
+避免了使用标准组件时的重复工作，同时仍然保持了进行底层修改的能力。随着时间的推移，
+深度学习库已经演变成提供越来越粗糙的抽象。就像半导体设计师从指定晶体管到逻辑电路再到编写代码一样，
+神经网络研究人员已经从考虑单个人工神经元的行为转变为从层的角度构思网络，
+现在通常在设计结构时考虑的是更粗糙的块（block）。
 
 
-So far, we have introduced some basic machine learning concepts,
-ramping up to fully-functional deep learning models.
-In the last chapter,
-we implemented each component of a multilayer perceptron from scratch
-and even showed how to leverage high-level APIs
-to roll out the same models effortlessly.
-To get you that far that fast, we *called upon* the libraries,
-but skipped over more advanced details about *how they work*.
-In this chapter, we will peel back the curtain,
-digging deeper into the key components of deep learning computation,
-namely model construction, parameter access and initialization,
-designing custom layers and blocks, reading and writing models to disk,
-and leveraging GPUs to achieve dramatic speedups.
-These insights will move you from *end user* to *power user*,
-giving you the tools needed to reap the benefits
-of a mature deep learning library while retaining the flexibility
-to implement more complex models, including those you invent yourself!
-While this chapter does not introduce any new models or datasets,
-the advanced modeling chapters that follow rely heavily on these techniques.
+到目前为止，我们已经介绍了一些基本的机器学习概念，并慢慢介绍了功能齐全的深度学习模型。
+在上一章中，我们从零开始实现了多层感知机的每个组件，然后展示了如何利用高级API轻松地实现相同的模型。
+为了易于学习，我们调用了深度学习库，但是跳过了它们工作的细节。在本章中，
+我们开始深入探索深度学习计算的关键组件，即模型构建、参数访问与初始化、设计自定义层和块、
+将模型读写到磁盘，以及利用GPU实现显著的加速。这些知识将使你从*基础用户*变为*高级用户*。
+虽然本章不介绍任何新的模型或数据集，但后面的高级模型章节在很大程度上依赖于本章的知识。
 
 ```toc
 :maxdepth: 2
