@@ -1,58 +1,23 @@
-# Attention Mechanisms
+# 注意力机制
 :label:`chap_attention`
 
-The optic nerve of a primate's visual system
-receives massive sensory input,
-far exceeding what the brain can fully process.
-Fortunately,
-not all stimuli are created equal.
-Focalization and concentration of consciousness 
-have enabled primates to direct attention
-to objects of interest,
-such as preys and predators, 
-in the complex visual environment.
-The ability of paying attention to 
-only a small fraction of the information
-has evolutionary significance,
-allowing human beings 
-to live and succeed.
+灵长类动物视觉系统的视神经接受大量的感官输入，远远超过了大脑能够完全处理的程度。
+幸运的是，并非所有的刺激都是平等的。意识的聚集和集中使灵长类动物能够在复杂的
+视觉环境中将注意力引向感兴趣的物体，例如猎物和捕食者。只关注一小部分信息的能力具有进化意义，
+使人类能够生存和成功。
 
-Scientists have been studying attention 
-in the cognitive neuroscience field
-since the 19th century.
-In this chapter,
-we will begin by reviewing a popular framework
-explaining how attention is deployed in a visual scene.
-Inspired by the attention cues in this framework,
-we will design models
-that leverage such attention cues.
-Notably, the Nadaraya-Waston kernel regression
-in 1964 is a simple demonstration of machine learning with *attention mechanisms*.
+自 19 世纪以来，科学家们一直在研究认知神经科学领域的注意力。在本章中，
+我们将首先回顾一个热门框架，解释如何在视觉场景中部署注意力。受此框架中的注意线索的启发，
+我们将设计利用这些关注线索的模型。值得注意的是，1964 年的 Nadaraya-Waston 内核回归是具有
+*注意力机制* 的机器学习的简单演示。
 
-Next, we will go on to introduce attention functions 
-that have been extensively used in 
-the design of attention models in deep learning.
-Specifically,
-we will show how to use these functions
-to design the *Bahdanau attention*,
-a groundbreaking attention model in deep learning
-that can align bidirectionally and is differentiable.
+接下来，我们将继续介绍在深度学习中注意力模型设计中广泛使用的注意力函数。具体来说，
+我们将展示如何使用这些函数来设计 *Bahdanau 注意力*，这是深度学习中的突破性注意力模型，
+可以双向对齐并且可区分。
 
-In the end,
-equipped with 
-the more recent
-*multi-head attention*
-and *self-attention* designs,
-we will describe the *Transformer* architecture
-based solely on attention mechanisms.
-Since their proposal in 2017,
-Transformers
-have been pervasive in modern 
-deep learning applications,
-such as in areas of
-language,
-vision, speech,
-and reinforcement learning.
+最后，配备了最近的 *多头注意力* 和 *自注意力* 设计，我们将仅基于注意机制来描述
+*Transformer* 架构。自 2017 年提出建议以来，Transformers 一直在现代深度学习应用中普遍存在，
+例如语言、视觉、语音和强化学习领域。
 
 ```toc
 :maxdepth: 2
