@@ -1,68 +1,30 @@
-# Convolutional Neural Networks
+# 卷积神经网络
 :label:`chap_cnn`
 
-In earlier chapters, we came up against image data,
-for which each example consists of a 2D grid of pixels.
-Depending on whether we're handling black-and-white or color images,
-each pixel location might be associated with either
-*one* or *multiple* numerical values, respectively.
-Until now, our way of dealing with this rich structure
-was deeply unsatisfying.
-We simply discarded each image's spatial structure
-by flattening them into 1D vectors, feeding them 
-through a (fully connected) MLP.
-Because these networks invariant to the order
-of the features we could get similar results
-regardless of whether we preserve an order 
-corresponding to the spatial structure of the pixels
-or if we permute the columns of our design matrix
-before fitting the MLP's parameters.
-Preferably, we would leverage our prior knowledge
-that nearby pixels are typically related to each other,
-to build efficient models for learning from image data. 
+在前面的章节中，我们曾讨论过图像数据。对于图像数据，每个样本都由一个二维像素网格组成。
+取决于我们处理的是黑白图像还是彩色图像，每个像素可能与一个或多个数值相关。到目前为止，
+我们处理二维结构的方式还十分有限：先将每个图像的空间结构展平成一维向量，
+再放入一个多层感知机中。由于这些网络相对于特征元素的顺序不变，所以无论我们保持像素在二维空间的顺序，
+或是在拟合多层感知机的参数之前对二维矩阵的列进行交换，我们都可以训练相似的神经网络。
+而最优情况是利用先验知识，即利用相近像素之间的相互关联性，建立图像数据的有效模型。
 
-This chapter introduces convolutional neural networks (CNNs),
-a powerful family of neural networks
-that were designed for precisely this purpose.
-CNN-based architectures are now ubiquitous
-in the field of computer vision, 
-and have become so dominant
-that hardly anyone today would develop
-a commercial application or enter a competition
-related to image recognition, object detection,
-or semantic segmentation,
-without building off of this approach.
+本章介绍的卷积神经网络（convolutional neural network，CNN）是一类强大的神经网络，
+正是为处理图像数据而设计的。基于卷积神经网络结构的模型在计算机视觉领域中已经占主导地位，
+当今几乎所有的图像识别、对象检测或语义分割相关的学术竞赛、商业应用都以这种方法为基础。
 
-Modern *ConvNets*, as they are called colloquially
-owe their design to inspirations from biology, group theory,
-and a healthy dose of experimental tinkering.
-In addition to their sample efficiency in achieving accurate models,
-convolutional neural networks tend to be computationally efficient,
-both because they require fewer parameters than dense architectures
-and because convolutions are easy to parallelize across GPU cores.
-Consequently, practitioners often apply CNNs whenever possible,
-and increasingly they have emerged as credible competitors
-even on tasks with 1D sequence structure,
-such as audio, text, and time series analysis,
-where recurrent neural networks are conventionally used.
-Some clever adaptations of CNNs have also brought them to bear
-on graph-structured data and in recommender systems.
+现代卷积神经网络的设计得益于生物学、群论和大量的实验研究。除了在获得精确模型的采样效率外，
+卷积神经网络在计算上也是极其高效的。这是因为卷积神经网络需要的参数比多层感知机少，
+而且卷积神经网络很容易用GPU并行计算。因此，实践者经常尽可能多地应用卷积神经网络。
+即使在一维序列结构的任务上（例如音频、文本和时间序列分析），通常大家使用的是循环神经网络，
+而实践者也会经常使用到卷积神经网络。通过对卷积神经网络一些巧妙的调整，
+也使它们在图结构数据和推荐系统中发挥作用。
 
-First, we will walk through the basic operations
-that comprise the backbone of all convolutional networks.
-These include the convolutional layers themselves,
-nitty-gritty details including padding and stride,
-the pooling layers used to aggregate information
-across adjacent spatial regions,
-the use of multiple *channels* (also called *filters*) at each layer,
-and a careful discussion of the structure of modern architectures.
-We will conclude the chapter with a full working example of LeNet,
-the first convolutional network successfully deployed,
-long before the rise of modern deep learning.
-In the next chapter, we will dive into full implementations
-of some popular and comparatively recent CNN architectures
-whose designs represent most of the techniques
-commonly used by modern practitioners.
+在本章的开始，我们将介绍构成所有卷积网络主干的基本元素。这包括卷积层本身、填充
+（padding）和步幅（stride）、用于在相邻空间区域聚集信息的池化层（pooling）、
+每层中多通道（channel）的使用以及有关现代卷积网络架构的全面介绍。在本章的最后，
+我们将介绍一个完整的、可运行的LeNet模型：这是第一个卷积神经网络，
+早在现代深度学习兴起之前就已经得到成功应用。在下一章中，我们将深入研究一些流行的、
+相对较新并具有一定代表性的卷积网络架构。
 
 ```toc
 :maxdepth: 2

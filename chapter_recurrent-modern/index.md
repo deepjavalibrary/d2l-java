@@ -1,50 +1,21 @@
-# Modern Recurrent Neural Networks
+# 现代循环神经网络
 :label:`chap_modern_rnn`
 
-We have introduced the basics of RNNs,
-which can better handle sequence data.
-For demonstration,
-we implemented RNN-based
-language models on text data.
-However, 
-such techniques may not be sufficient
-for practitioners when they face
-a wide range of sequence learning problems nowadays.
+前文中我们已经介绍了循环神经网络的基础知识，这种网络可以更好地处理序列数据。
+同时，我们在文本数据上实现了基于循环神经网络的语言模型。
+但是，对于面对当今各种序列学习问题的从业人员，这些技术可能并不够用。
 
-For instance,
-a notable issue in practice
-is the numerical instability of RNNs.
-Although we have applied implementation tricks
-such as gradient clipping,
-this issue can be alleviated further
-with more sophisticated designs of sequence models.
-Specifically,
-gated RNNs are much more common in practice.
-We will begin by introducing two of such widely-used networks,
-namely *gated recurrent units* (GRUs) and *long short-term memory* (LSTM).
-Furthermore, we will expand the RNN architecture
-with a single undirectional hidden layer
-that has been discussed so far.
-We will describe deep architectures with
-multiple hidden layers,
-and discuss the bidirectional design
-with both forward and backward recurrent computations.
-Such expansions are frequently adopted
-in modern recurrent networks.
-When explaining these RNN variants,
-we continue to consider
-the same language modeling problem introduced in :numref:`chap_rnn`.
+例如，循环神经网络在实践中的一个常见问题是数值不稳定性。
+尽管我们已经应用了梯度裁剪等实现技巧，但是通过设计更复杂的序列模型可以进一步缓解这个问题。
+本章中，我们首先将介绍两个广泛使用的网络，即 *门控循环单元* (gated recurrent units, GRU)
+和 *长短期记忆网络* (long short-term memory, LSTM)。
+然后，我们将基于单向隐藏层来扩展循环神经网络架构，现代循环网络经常采用这种扩展。
+我们将描述具有多个隐藏层的深层架构，并讨论基于前向和后向循环计算的双向设计。
+在解释这些循环神经网络的变体时，我们将继续考虑 :numref:`chap_rnn` 中引入的语言模型问题。
 
-In fact, language modeling
-reveals only a small fraction of what 
-sequence learning is capable of.
-In a variety of sequence learning problems,
-such as automatic speech recognition, text to speech, and machine translation,
-both inputs and outputs are sequences of arbitrary length.
-To explain how to fit this type of data,
-we will take machine translation as an example,
-and introduce the encoder-decoder architecture based on
-RNNs and beam search for sequence generation.
+事实上，语言建模只描绘了序列学习能力的冰山一角。
+在各种序列学习问题中，如自动语音识别、文本到语音的转换和机器翻译，输入和输出都是任意长度的序列。
+本章中，我们将以机器翻译为例介绍基于循环神经网络的“编码器－解码器”结构和束搜索，并用它们来生成序列。
 
 ```toc
 :maxdepth: 2
