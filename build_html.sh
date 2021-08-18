@@ -44,7 +44,7 @@ function eval {
     fi
     echo "Evaluating file: $1"
     echo "saving output to: $output_dir/$1"
-    jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=5400 --output temp "$1"
+    jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=7200 --output temp "$1"
     mkdir -p $output_dir/$dir
     mv "$dir/temp.ipynb" "$output_dir/$1"
     aws s3 cp "$output_dir/$1" "s3://d2l-java-notebook/${S3_PREFIX}/$output_dir/$1"
