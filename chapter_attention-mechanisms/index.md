@@ -25,8 +25,6 @@
 attention-cues
 nadaraya-waston
 attention-scoring-functions
-bahdanau-attention
 multihead-attention
 self-attention-and-positional-encoding
-transformer
 ```
