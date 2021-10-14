@@ -1,0 +1,47 @@
+plugins {
+    id "java"
+    id 'idea'
+}
+
+group "com.example"
+version "1.0-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
+}
+
+configure(this) {
+    sourceCompatibility = JavaVersion.VERSION_11
+
+    idea {
+        module {
+            outputDir = file('build/classes/java/main')
+            testOutputDir = file('build/classes/java/test')
+            // inheritOutputDirs = true
+        }
+    }
+
+    apply from: file("tools/gradle/java-formatter.gradle")
+}
+
+def djl_version = "0.13.0"
+
+dependencies {
+    implementation platform("ai.djl:bom:${djl_version}")
+    implementation "ai.djl:basicdataset"
+    implementation "ai.djl:model-zoo"
+
+    implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_slf4j_version}"
+
+    implementation "ai.djl.mxnet:mxnet-engine"
+    implementation "ai.djl.mxnet:mxnet-native-auto"
+
+    implementation "ai.djl.pytorch:pytorch-engine"
+    implementation "ai.djl.pytorch:pytorch-native-auto"
+
+    implementation "tech.tablesaw:tablesaw-jsplot:0.38.1"
+}
