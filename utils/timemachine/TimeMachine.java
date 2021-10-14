@@ -188,7 +188,9 @@ public class TimeMachine {
                             .optInitializer(
                                     new NormalInitializer(0.01f),
                                     Parameter.Type.WEIGHT) // setting the initializer
-                            .optDevices(Device.getDevices(1)) // setting the number of GPUs needed
+                            .optDevices(
+                                    manager.getEngine()
+                                            .getDevices(1)) // setting the number of GPUs needed
                             .addEvaluator(new Accuracy()) // Model Accuracy
                             .addTrainingListeners(TrainingListener.Defaults.logging()); // Logging
 

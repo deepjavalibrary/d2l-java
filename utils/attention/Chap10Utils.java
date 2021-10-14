@@ -8,20 +8,20 @@ public class Chap10Utils {
         // `X`: 3D tensor, `validLens`: 1D or 2D tensor
         if (validLens == null) {
             return X.softmax(-1);
-        } else {
-            Shape shape = X.getShape();
-            if (validLens.getShape().dimension() == 1) {
-                validLens = validLens.repeat(shape.get(1));
-            } else {
-                validLens = validLens.reshape(-1);
-            }
-            // On the last axis, replace masked elements with a very large negative
-            // value, whose exponentiation outputs 0
-            X =
-                    X.reshape(new Shape(-1, shape.get(shape.dimension() - 1)))
-                            .sequenceMask(validLens, (float) -1E6);
-            return X.softmax(-1).reshape(shape);
         }
+
+        Shape shape = X.getShape();
+        if (validLens.getShape().dimension() == 1) {
+            validLens = validLens.repeat(shape.get(1));
+        } else {
+            validLens = validLens.reshape(-1);
+        }
+        // On the last axis, replace masked elements with a very large negative
+        // value, whose exponentiation outputs 0
+        X =
+                X.reshape(new Shape(-1, shape.get(shape.dimension() - 1)))
+                        .sequenceMask(validLens, (float) -1E6);
+        return X.softmax(-1).reshape(shape);
     }
 
     public static NDArray transposeQkv(NDArray X, int numHeads) {

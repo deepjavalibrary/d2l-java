@@ -10,14 +10,10 @@ import ai.djl.util.PairList;
 /** The base class for the encoder-decoder architecture. */
 public class EncoderDecoder extends AbstractBlock {
 
-    private static final byte VERSION = 1;
-
     protected Encoder encoder;
     protected Decoder decoder;
 
     public EncoderDecoder(Encoder encoder, Decoder decoder) {
-        super(VERSION);
-
         this.encoder = encoder;
         this.addChildBlock("encoder", this.encoder);
         this.decoder = decoder;

@@ -1,4 +1,3 @@
-import ai.djl.Device;
 import ai.djl.Model;
 import ai.djl.basicdataset.tabular.AirfoilRandomAccess;
 import ai.djl.engine.Engine;
@@ -28,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.Table;
-import tech.tablesaw.plotly.api.LinePlot;
 
 public class TrainingChapter11 {
 
@@ -95,7 +93,7 @@ public class TrainingChapter11 {
                         .addColumns(
                                 DoubleColumn.create("epoch", Functions.floatToDoubleArray(epoch)),
                                 DoubleColumn.create("loss", Functions.floatToDoubleArray(loss)));
-        display(LinePlot.create("loss vs. epoch", data, "epoch", "loss"));
+        // display(LinePlot.create("loss vs. epoch", data, "epoch", "loss"));
     }
 
     public static LossTime trainCh11(
@@ -173,7 +171,7 @@ public class TrainingChapter11 {
         DefaultTrainingConfig config =
                 new DefaultTrainingConfig(loss)
                         .optOptimizer(sgd)
-                        .optDevices(Device.getDevices(1)) // single GPU
+                        .optDevices(manager.getEngine().getDevices(1)) // single GPU
                         .addEvaluator(new Accuracy()) // Model Accuracy
                         .addTrainingListeners(TrainingListener.Defaults.logging()); // Logging
 

@@ -6,13 +6,7 @@ import ai.djl.nn.AbstractBlock;
 /** The base decoder interface for the encoder-decoder architecture. */
 public abstract class Decoder extends AbstractBlock {
 
-    private static final byte VERSION = 1;
-
     protected NDArray attentionWeights;
-
-    public Decoder() {
-        super(VERSION);
-    }
 
     public abstract NDList initState(NDList encOutputs);
 

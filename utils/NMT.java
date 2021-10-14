@@ -4,50 +4,38 @@ import ai.djl.ndarray.index.NDIndex;
 import ai.djl.ndarray.types.DataType;
 import ai.djl.ndarray.types.Shape;
 import ai.djl.training.dataset.ArrayDataset;
+import ai.djl.training.util.DownloadUtils;
 import ai.djl.util.Pair;
-import java.io.*;
-import java.net.URL;
-import java.nio.file.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.stream.IntStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-// %load ../utils/TimeMachineUtils.java
-
 public class NMT {
-    public static StringBuilder readDataNMT() throws IOException {
-        File file = new File("./fra-eng.zip");
-        if (!file.exists()) {
-            InputStream inputStream =
-                    new URL("http://d2l-data.s3-accelerate.amazonaws.com/fra-eng.zip").openStream();
-            Files.copy(
-                    inputStream, Paths.get("./fra-eng.zip"), StandardCopyOption.REPLACE_EXISTING);
-        }
 
-        ZipFile zipFile = new ZipFile(file);
+    public static String readDataNMT() throws IOException {
+        DownloadUtils.download(
+                "http://d2l-data.s3-accelerate.amazonaws.com/fra-eng.zip", "fra-eng.zip");
+        ZipFile zipFile = new ZipFile(new File("fra-eng.zip"));
         Enumeration<? extends ZipEntry> entries = zipFile.entries();
-        InputStream stream = null;
         while (entries.hasMoreElements()) {
             ZipEntry entry = entries.nextElement();
             if (entry.getName().contains("fra.txt")) {
-                stream = zipFile.getInputStream(entry);
-                break;
+                InputStream stream = zipFile.getInputStream(entry);
+                return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
             }
         }
-
-        String[] lines;
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(stream))) {
-            lines = in.lines().toArray(String[]::new);
-        }
-        StringBuilder output = new StringBuilder();
-        for (String line : lines) {
-            output.append(line).append('\n');
-        }
-        return output;
+        return null;
     }
 
-    public static StringBuilder preprocessNMT(String text) {
+    public static String preprocessNMT(String text) {
         // Replace non-breaking space with space, and convert uppercase letters to
         // lowercase ones
 
@@ -63,7 +51,7 @@ public class NMT {
             }
             out.append(currChar);
         }
-        return out;
+        return out.toString();
     }
 
     public static boolean noSpace(Character currChar, Character prevChar) {
@@ -95,7 +83,9 @@ public class NMT {
     public static int[] truncatePad(Integer[] integerLine, int numSteps, int paddingToken) {
         /* Truncate or pad sequences */
         int[] line = Arrays.stream(integerLine).mapToInt(i -> i).toArray();
-        if (line.length > numSteps) return Arrays.copyOfRange(line, 0, numSteps);
+        if (line.length > numSteps) {
+            return Arrays.copyOfRange(line, 0, numSteps);
+        }
         int[] paddingTokenArr = new int[numSteps - line.length]; // Pad
         Arrays.fill(paddingTokenArr, paddingToken);
 
@@ -129,9 +119,8 @@ public class NMT {
     public static Pair<ArrayDataset, Pair<Vocab, Vocab>> loadDataNMT(
             int batchSize, int numSteps, int numExamples, NDManager manager) throws IOException {
         /* Return the iterator and the vocabularies of the translation dataset. */
-        StringBuilder text = preprocessNMT(readDataNMT().toString());
-        Pair<ArrayList<String[]>, ArrayList<String[]>> pair =
-                tokenizeNMT(text.toString(), numExamples);
+        String text = preprocessNMT(readDataNMT());
+        Pair<ArrayList<String[]>, ArrayList<String[]>> pair = tokenizeNMT(text, numExamples);
         ArrayList<String[]> source = pair.getKey();
         ArrayList<String[]> target = pair.getValue();
         Vocab srcVocab =

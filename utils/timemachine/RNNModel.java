@@ -10,14 +10,11 @@ import ai.djl.util.PairList;
 
 public class RNNModel<T extends AbstractBlock> extends AbstractBlock {
 
-    private static final byte VERSION = 2;
-
     private T rnnLayer;
     private Linear dense;
     private int vocabSize;
 
     public RNNModel(T rnnLayer, int vocabSize) {
-        super(VERSION);
         this.rnnLayer = rnnLayer;
         this.addChildBlock("rnn", rnnLayer);
         this.vocabSize = vocabSize;
@@ -37,15 +34,15 @@ public class RNNModel<T extends AbstractBlock> extends AbstractBlock {
             NDList inputs,
             boolean training,
             PairList<String, Object> params) {
-        NDArray X = inputs.get(0).transpose().oneHot(this.vocabSize);
+        NDArray X = inputs.get(0).transpose().oneHot(vocabSize);
         inputs.set(0, X);
-        NDList result = this.rnnLayer.forward(parameterStore, inputs, training);
+        NDList result = rnnLayer.forward(parameterStore, inputs, training);
         NDArray Y = result.get(0);
         NDList state = result.subNDList(1);
 
         int shapeLength = Y.getShape().getShape().length;
         NDList output =
-                this.dense.forward(
+                dense.forward(
                         parameterStore,
                         new NDList(Y.reshape(new Shape(-1, Y.getShape().get(shapeLength - 1)))),
                         training);

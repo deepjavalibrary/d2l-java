@@ -1,4 +1,5 @@
 import ai.djl.Device;
+import ai.djl.engine.Engine;
 import java.util.function.Function;
 
 public class Functions {
@@ -24,7 +25,7 @@ public class Functions {
 
     /** Return the i'th GPU if it exists, otherwise return the CPU */
     public static Device tryGpu(int i) {
-        return Device.getGpuCount() >= i + 1 ? Device.gpu(i) : Device.cpu();
+        return Engine.getInstance().getGpuCount() > i ? Device.gpu(i) : Device.cpu();
     }
 
     /**

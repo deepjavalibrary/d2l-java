@@ -10,7 +10,7 @@ import tech.tablesaw.plotly.traces.ScatterTrace;
 
 public class GradDescUtils {
 
-    public static void plotGD(
+    public static Figure plotGD(
             float[] x,
             float[] y,
             float[] segment,
@@ -41,7 +41,7 @@ public class GradDescUtils {
 
         Layout layout = Layout.builder().height(height).width(width).showLegend(false).build();
 
-        display(new Figure(layout, trace, trace2, trace3));
+        return new Figure(layout, trace, trace2, trace3);
     }
 
     public static void showTrace(float[] res, Function<Float, Float> f, NDManager manager) {
@@ -57,7 +57,9 @@ public class GradDescUtils {
     }
 
     public static class Weights {
-        public float x1, x2;
+
+        public float x1;
+        public float x2;
 
         public Weights(float x1, float x2) {
             this.x1 = x1;
