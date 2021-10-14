@@ -1,13 +1,6 @@
 name: D2L book Notebook integration tests
 
 on:
-  push:
-    paths-ignore:
-      - "**.md"
-      - "**.json"
-      - "**.html"
-      - "**.js"
-      - "**.css"
   pull_request:
     paths-ignore:
       - "**.md"
