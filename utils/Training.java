@@ -71,13 +71,12 @@ class Training {
                 .getFloat();
     }
 
-    public static void trainingChapter6(
+    public static double trainingChapter6(
             ArrayDataset trainIter,
             ArrayDataset testIter,
             int numEpochs,
             Trainer trainer,
-            Map<String, double[]> evaluatorMetrics,
-            double avgTrainTimePerEpoch)
+            Map<String, double[]> evaluatorMetrics)
             throws IOException, TranslateException {
 
         trainer.setMetrics(new Metrics());
@@ -103,7 +102,7 @@ class Training {
                                             .toArray());
                         });
 
-        avgTrainTimePerEpoch = metrics.mean("epoch");
+        return metrics.mean("epoch");
     }
 
     /* Softmax-regression-scratch */

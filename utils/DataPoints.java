@@ -5,7 +5,8 @@ import ai.djl.ndarray.types.Shape;
 
 public class DataPoints {
 
-    private NDArray X, y;
+    private NDArray X;
+    private NDArray y;
 
     public DataPoints(NDArray X, NDArray y) {
         this.X = X;

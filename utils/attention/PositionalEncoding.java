@@ -11,27 +11,23 @@ import ai.djl.util.PairList;
 
 public class PositionalEncoding extends AbstractBlock {
 
-    private static final byte VERSION = 1;
-
     private Dropout dropout;
     public NDArray P;
 
     public PositionalEncoding(int numHiddens, float dropout, int maxLen, NDManager manager) {
-        super(VERSION);
-
         this.dropout = Dropout.builder().optRate(dropout).build();
         this.addChildBlock("dropout", this.dropout);
 
         // Create a long enough `P`
-        this.P = manager.zeros(new Shape(1, maxLen, numHiddens));
+        P = manager.zeros(new Shape(1, maxLen, numHiddens));
         NDArray X =
                 manager.arange(maxLen)
                         .reshape(-1, 1)
                         .div(
                                 manager.create(10000)
                                         .pow(manager.arange(0, numHiddens, 2).div(numHiddens)));
-        this.P.set(new NDIndex(":, :, {}::{}", 0, 2), X.sin());
-        this.P.set(new NDIndex(":, :, {}::{}", 1, 2), X.cos());
+        P.set(new NDIndex(":, :, {}::{}", 0, 2), X.sin());
+        P.set(new NDIndex(":, :, {}::{}", 1, 2), X.cos());
     }
 
     @Override
@@ -41,9 +37,8 @@ public class PositionalEncoding extends AbstractBlock {
             boolean training,
             PairList<String, Object> params) {
         NDArray X = inputs.get(0);
-        X = X.add(this.P.get(":, :{}, :", X.getShape().get(1)));
-        return new NDList(
-                this.dropout.forward(parameterStore, new NDList(X), training, params).get(0));
+        X = X.add(P.get(":, :{}, :", X.getShape().get(1)));
+        return new NDList(dropout.forward(parameterStore, new NDList(X), training, params).get(0));
     }
 
     @Override

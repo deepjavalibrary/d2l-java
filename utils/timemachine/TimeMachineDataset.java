@@ -48,7 +48,7 @@ public class TimeMachineDataset extends RandomAccessDataset {
     }
 
     @Override
-    public void prepare(Progress progress) throws IOException, TranslateException {
+    public void prepare(Progress progress) throws IOException {
         if (prepared) {
             return;
         }
