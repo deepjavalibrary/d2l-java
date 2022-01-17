@@ -1,16 +1,10 @@
-import ai.djl.ndarray.*;
-import ai.djl.training.dataset.*;
+import ai.djl.ndarray.NDArray;
+import ai.djl.ndarray.NDManager;
+import ai.djl.training.dataset.ArrayDataset;
+import ai.djl.training.dataset.Record;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import javax.swing.BoxLayout;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 public class FashionMnistUtils {
 
@@ -50,104 +44,57 @@ public class FashionMnistUtils {
         return textLabels[labelIndice];
     }
 
-    public static class ImagePanel extends JPanel {
-        int SCALE;
-        BufferedImage img;
-
-        public ImagePanel() {
-            this.SCALE = 1;
+    public static BufferedImage showImages(
+            ArrayDataset dataset, int number, int width, int height, int scale, NDManager manager) {
+        BufferedImage[] images = new BufferedImage[number];
+        String[] labels = new String[number];
+        for (int i = 0; i < number; i++) {
+            Record record = dataset.get(manager, i);
+            NDArray array = record.getData().get(0).squeeze(-1);
+            int y = (int) record.getLabels().get(0).getFloat();
+            images[i] = toImage(array, width, height);
+            labels[i] = getFashionMnistLabel(y);
         }
+        int w = images[0].getWidth() * scale;
+        int h = images[0].getHeight() * scale;
 
-        public ImagePanel(int scale, BufferedImage img) {
-            this.SCALE = scale;
-            this.img = img;
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            Graphics2D g2d = (Graphics2D) g;
-            g2d.scale(SCALE, SCALE);
-            g2d.drawImage(this.img, 0, 0, this);
-        }
+        return ImageUtils.showImages(images, labels, w, h);
     }
 
-    public static class Container extends JPanel {
-        public Container(String label) {
-            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-            JLabel l = new JLabel(label, JLabel.CENTER);
-            l.setAlignmentX(Component.CENTER_ALIGNMENT);
-            add(l);
-        }
-
-        public Container(String trueLabel, String predLabel) {
-            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-            JLabel l = new JLabel(trueLabel, JLabel.CENTER);
-            l.setAlignmentX(Component.CENTER_ALIGNMENT);
-            add(l);
-            JLabel l2 = new JLabel(predLabel, JLabel.CENTER);
-            l2.setAlignmentX(Component.CENTER_ALIGNMENT);
-            add(l2);
-        }
-    }
-
-    public static void showImages(
-            ArrayDataset dataset, int number, int WIDTH, int HEIGHT, int SCALE, NDManager manager) {
-        // Plot a list of images
-        JFrame frame = new JFrame("Fashion Mnist");
-        for (int record = 0; record < number; record++) {
-            NDArray X = dataset.get(manager, record).getData().get(0).squeeze(-1);
-            int y = (int) dataset.get(manager, record).getLabels().get(0).getFloat();
-            BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_BYTE_GRAY);
-            Graphics2D g = (Graphics2D) img.getGraphics();
-            for (int i = 0; i < WIDTH; i++) {
-                for (int j = 0; j < HEIGHT; j++) {
-                    float c = X.getFloat(j, i) / 255; // scale down to between 0 and 1
-                    g.setColor(new Color(c, c, c)); // set as a gray color
-                    g.fillRect(i, j, 1, 1);
-                }
-            }
-            JPanel panel = new ImagePanel(SCALE, img);
-            panel.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
-            JPanel container = new Container(getFashionMnistLabel(y));
-            container.add(panel);
-            frame.getContentPane().add(container);
-        }
-        frame.getContentPane().setLayout(new FlowLayout());
-        frame.pack();
-        frame.setVisible(true);
-    }
-
-    public static void showImages(
+    public static BufferedImage showImages(
             ArrayDataset dataset,
             int[] predLabels,
-            int WIDTH,
-            int HEIGHT,
-            int SCALE,
+            int width,
+            int height,
+            int scale,
             NDManager manager) {
-        // Plot a list of images
-        JFrame frame = new JFrame("Fashion Mnist");
-        for (int record = 0; record < predLabels.length; record++) {
-            NDArray X = dataset.get(manager, record).getData().get(0).squeeze(-1);
-            int y = (int) dataset.get(manager, record).getLabels().get(0).getFloat();
-            BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_BYTE_GRAY);
-            Graphics2D g = (Graphics2D) img.getGraphics();
-            for (int i = 0; i < WIDTH; i++) {
-                for (int j = 0; j < HEIGHT; j++) {
-                    float c = X.getFloat(j, i) / 255; // scale down to between 0 and 1
-                    g.setColor(new Color(c, c, c)); // set as a gray color
-                    g.fillRect(i, j, 1, 1);
-                }
-            }
-            JPanel panel = new ImagePanel(SCALE, img);
-            panel.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
-            JPanel container =
-                    new Container(
-                            getFashionMnistLabel(y), getFashionMnistLabel(predLabels[record]));
-            container.add(panel);
-            frame.getContentPane().add(container);
+        int number = predLabels.length;
+        BufferedImage[] images = new BufferedImage[number];
+        String[] labels = new String[number];
+        for (int i = 0; i < number; i++) {
+            Record record = dataset.get(manager, i);
+            NDArray array = record.getData().get(0).squeeze(-1);
+            images[i] = toImage(array, width, height);
+            labels[i] = getFashionMnistLabel(predLabels[i]);
         }
-        frame.getContentPane().setLayout(new FlowLayout());
-        frame.pack();
-        frame.setVisible(true);
+        int w = images[0].getWidth() * scale;
+        int h = images[0].getHeight() * scale;
+
+        return ImageUtils.showImages(images, labels, w, h);
+    }
+
+    private static BufferedImage toImage(NDArray array, int width, int height) {
+        System.setProperty("apple.awt.UIElement", "true");
+        BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY);
+        Graphics2D g = (Graphics2D) img.getGraphics();
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                float c = array.getFloat(j, i) / 255; // scale down to between 0 and 1
+                g.setColor(new Color(c, c, c)); // set as a gray color
+                g.fillRect(i, j, 1, 1);
+            }
+        }
+        g.dispose();
+        return img;
     }
 }
