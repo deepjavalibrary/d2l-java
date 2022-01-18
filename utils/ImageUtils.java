@@ -3,68 +3,71 @@ import ai.djl.modality.cv.output.BoundingBox;
 import ai.djl.modality.cv.output.DetectedObjects;
 import ai.djl.modality.cv.output.Rectangle;
 import ai.djl.ndarray.NDArray;
-import java.awt.*;
-import java.util.*;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.swing.*;
 
 public class ImageUtils {
 
-    public static class ImagePanel extends JPanel {
-        int SCALE;
-        Image img;
+    public static BufferedImage showImages(
+            BufferedImage[] images, String[] labels, int width, int height) {
+        int col = Math.min(1280 / width, images.length);
+        int row = (images.length + col - 1) / col;
 
-        public ImagePanel() {
-            this.SCALE = 1;
-        }
+        int textHeight = 28;
+        int w = col * (width + 3);
+        int h = row * (height + 3) + textHeight;
+        BufferedImage output = new BufferedImage(w + 3, h + 3, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = output.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setPaint(Color.LIGHT_GRAY);
+        g.fill(new java.awt.Rectangle(0, 0, w + 3, h + 3));
+        g.setPaint(Color.BLACK);
 
-        public ImagePanel(int scale, Image img) {
-            this.SCALE = scale;
-            this.img = img;
-        }
+        Font font = g.getFont();
+        FontMetrics metrics = g.getFontMetrics(font);
+        for (int i = 0; i < images.length; ++i) {
+            int x = (i % col) * (width + 3) + 3;
+            int y = (i / col) * (height + 3) + 3;
 
-        @Override
-        protected void paintComponent(Graphics g) {
-            Graphics2D g2d = (Graphics2D) g;
-            g2d.scale(SCALE, SCALE);
-            g2d.drawImage((java.awt.Image) this.img.getWrappedImage(), 0, 0, this);
+            int tx = x + (width - metrics.stringWidth(labels[i])) / 2;
+            int ty = y + ((textHeight - metrics.getHeight()) / 2) + metrics.getAscent();
+            g.drawString(labels[i], tx, ty);
+
+            BufferedImage img = images[i];
+            g.drawImage(img, x, y + textHeight, width, height, null);
         }
+        g.dispose();
+        return output;
     }
 
-    public static class Container extends JPanel {
-        public Container(String label) {
-            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-            JLabel l = new JLabel(label, JLabel.CENTER);
-            l.setAlignmentX(Component.CENTER_ALIGNMENT);
-            add(l);
+    public static BufferedImage showImages(BufferedImage[] images, int width, int height) {
+        int col = Math.min(1280 / width, images.length);
+        int row = (images.length + col - 1) / col;
+
+        int w = col * (width + 3);
+        int h = row * (height + 3);
+        BufferedImage output = new BufferedImage(w + 3, h + 3, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = output.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setPaint(Color.LIGHT_GRAY);
+        g.fill(new java.awt.Rectangle(0, 0, w + 3, h + 3));
+        for (int i = 0; i < images.length; ++i) {
+            int x = (i % col) * (width + 3) + 3;
+            int y = (i / col) * (height + 3) + 3;
+
+            BufferedImage img = images[i];
+            g.drawImage(img, x, y, width, height, null);
         }
-
-        public Container(String trueLabel, String predLabel) {
-            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-            JLabel l = new JLabel(trueLabel, JLabel.CENTER);
-            l.setAlignmentX(Component.CENTER_ALIGNMENT);
-            add(l);
-            JLabel l2 = new JLabel(predLabel, JLabel.CENTER);
-            l2.setAlignmentX(Component.CENTER_ALIGNMENT);
-            add(l2);
-        }
-    }
-
-    public static void showImage(Image img) {
-        showImage(img, "", 1);
-    }
-
-    public static void showImage(Image img, String name, int SCALE) {
-        int WIDTH = img.getWidth();
-        int HEIGHT = img.getHeight();
-        JFrame frame = new JFrame(name);
-        JPanel panel = new ImagePanel(SCALE, img);
-        panel.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
-        frame.getContentPane().add(panel);
-        frame.getContentPane().setLayout(new FlowLayout());
-        frame.pack();
-        frame.setVisible(true);
+        g.dispose();
+        return output;
     }
 
     public static void drawBBoxes(Image img, NDArray boxes, String[] labels) {
