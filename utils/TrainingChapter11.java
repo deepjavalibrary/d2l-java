@@ -22,11 +22,13 @@ import ai.djl.training.listener.TrainingListener;
 import ai.djl.training.loss.Loss;
 import ai.djl.training.optimizer.Optimizer;
 import ai.djl.translate.TranslateException;
+
+import tech.tablesaw.api.DoubleColumn;
+import tech.tablesaw.api.Table;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
-import tech.tablesaw.api.DoubleColumn;
-import tech.tablesaw.api.Table;
 
 public class TrainingChapter11 {
 

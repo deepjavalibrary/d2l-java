@@ -1,5 +1,6 @@
 import ai.djl.Device;
 import ai.djl.engine.Engine;
+
 import java.util.function.Function;
 
 public class Functions {

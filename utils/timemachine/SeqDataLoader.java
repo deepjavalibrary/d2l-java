@@ -5,6 +5,7 @@ import ai.djl.ndarray.index.NDIndex;
 import ai.djl.ndarray.types.DataType;
 import ai.djl.ndarray.types.Shape;
 import ai.djl.util.Pair;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -115,14 +116,12 @@ public class SeqDataLoader implements Iterable<NDList> {
 
         NDArray Xs =
                 manager.create(
-                        corpus.subList(offset, offset + numTokens)
-                                .stream()
+                        corpus.subList(offset, offset + numTokens).stream()
                                 .mapToInt(Integer::intValue)
                                 .toArray());
         NDArray Ys =
                 manager.create(
-                        corpus.subList(offset + 1, offset + 1 + numTokens)
-                                .stream()
+                        corpus.subList(offset + 1, offset + 1 + numTokens).stream()
                                 .mapToInt(Integer::intValue)
                                 .toArray());
         Xs = Xs.reshape(new Shape(batchSize, -1));

@@ -9,6 +9,7 @@ import ai.djl.training.dataset.Record;
 import ai.djl.translate.TranslateException;
 import ai.djl.util.Pair;
 import ai.djl.util.Progress;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
@@ -63,14 +64,12 @@ public class TimeMachineDataset extends RandomAccessDataset {
         int numTokens = (corpus.size() - offset - 1) / batchSize * batchSize;
         NDArray Xs =
                 manager.create(
-                        corpus.subList(offset, offset + numTokens)
-                                .stream()
+                        corpus.subList(offset, offset + numTokens).stream()
                                 .mapToInt(Integer::intValue)
                                 .toArray());
         NDArray Ys =
                 manager.create(
-                        corpus.subList(offset + 1, offset + 1 + numTokens)
-                                .stream()
+                        corpus.subList(offset + 1, offset + 1 + numTokens).stream()
                                 .mapToInt(Integer::intValue)
                                 .toArray());
         Xs = Xs.reshape(new Shape(batchSize, -1));

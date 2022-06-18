@@ -41,5 +41,5 @@ dependencies {
 
     implementation "ai.djl.pytorch:pytorch-engine"
 
-    implementation "tech.tablesaw:tablesaw-jsplot:0.38.1"
+    implementation 'tech.tablesaw:tablesaw-jsplot:0.43.1'
 }

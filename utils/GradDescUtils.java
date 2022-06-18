@@ -1,12 +1,14 @@
 import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDManager;
-import java.util.ArrayList;
-import java.util.function.BiFunction;
-import java.util.function.Function;
+
 import tech.tablesaw.plotly.components.Axis;
 import tech.tablesaw.plotly.components.Figure;
 import tech.tablesaw.plotly.components.Layout;
 import tech.tablesaw.plotly.traces.ScatterTrace;
+
+import java.util.ArrayList;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class GradDescUtils {
 
