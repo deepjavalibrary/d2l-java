@@ -8,6 +8,7 @@ import ai.djl.training.Trainer;
 import ai.djl.training.dataset.ArrayDataset;
 import ai.djl.training.dataset.Batch;
 import ai.djl.translate.TranslateException;
+
 import java.io.IOException;
 import java.util.Map;
 import java.util.function.BinaryOperator;
@@ -90,13 +91,13 @@ class Training {
                         evaluator -> {
                             evaluatorMetrics.put(
                                     "train_epoch_" + evaluator.getName(),
-                                    metrics.getMetric("train_epoch_" + evaluator.getName())
-                                            .stream()
+                                    metrics.getMetric("train_epoch_" + evaluator.getName()).stream()
                                             .mapToDouble(x -> x.getValue().doubleValue())
                                             .toArray());
                             evaluatorMetrics.put(
                                     "validate_epoch_" + evaluator.getName(),
-                                    metrics.getMetric("validate_epoch_" + evaluator.getName())
+                                    metrics
+                                            .getMetric("validate_epoch_" + evaluator.getName())
                                             .stream()
                                             .mapToDouble(x -> x.getValue().doubleValue())
                                             .toArray());

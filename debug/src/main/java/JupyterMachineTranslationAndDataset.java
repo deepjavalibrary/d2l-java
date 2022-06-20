@@ -21,6 +21,11 @@ import ai.djl.training.dataset.Batch;
 import ai.djl.training.util.DownloadUtils;
 import ai.djl.translate.TranslateException;
 import ai.djl.util.Pair;
+
+import tech.tablesaw.plotly.components.Figure;
+import tech.tablesaw.plotly.components.Layout;
+import tech.tablesaw.plotly.traces.HistogramTrace;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,9 +38,6 @@ import java.util.List;
 import java.util.stream.IntStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import tech.tablesaw.plotly.components.Figure;
-import tech.tablesaw.plotly.components.Layout;
-import tech.tablesaw.plotly.traces.HistogramTrace;
 
 public final class JupyterMachineTranslationAndDataset {
 
