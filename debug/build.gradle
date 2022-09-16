@@ -28,7 +28,7 @@ configure(this) {
     apply from: file("tools/gradle/java-formatter.gradle")
 }
 
-def djl_version = "0.17.0"
+def djl_version = "0.19.0"
 
 dependencies {
     implementation platform("ai.djl:bom:${djl_version}")
