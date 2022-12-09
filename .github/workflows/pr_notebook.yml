@@ -12,7 +12,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         group: ["CH1_CH4_DROPOUT", "CH4_MID", "CH4_REST", "CH8_1", "CH8_2", "CH9_1", "CH9_2", "CH10_1", "CH10_2", "CH11", "CH14", "REST"]
@@ -30,16 +30,17 @@ jobs:
       CH14: "word2vec.ipynb approx-training.ipynb word-embedding-dataset.ipynb glove.ipynb subword-embedding.ipynb"
       REST: "chapter_convolutional-neural-networks chapter_linear-networks utils"
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
       - name: Set up JDK 11
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
+          distribution: 'corretto'
           java-version: 11
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python3
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
-          python-version: 3.7
+          python-version: '3.x'
       - name: Install IJava kernel
         run: |
           pip3 install jupyter
@@ -52,7 +53,7 @@ jobs:
           export MAX_EPOCH=2
           bash test_notebook.sh $${{ matrix.group }}
       - name: generated Notebook in html
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         if: always()
         with:
           name: notebook
