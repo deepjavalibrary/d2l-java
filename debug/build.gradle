@@ -41,5 +41,9 @@ dependencies {
 
     implementation "ai.djl.pytorch:pytorch-engine"
 
-    implementation 'tech.tablesaw:tablesaw-jsplot:0.43.1'
+    implementation "tech.tablesaw:tablesaw-jsplot:0.43.1"
+
+    // Upgrade tablesaw dependencies manually
+    implementation "io.pebbletemplates:pebble:3.2.0"
+    implementation "com.fasterxml.jackson.core:jackson-databind:1.13.5"
 }
