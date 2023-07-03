@@ -17,7 +17,7 @@ import java.util.function.UnaryOperator;
 class Training {
 
     public static NDArray linreg(NDArray X, NDArray w, NDArray b) {
-        return X.dot(w).add(b);
+        return X.matMul(w).add(b);
     }
 
     public static NDArray squaredLoss(NDArray yHat, NDArray y) {
