@@ -6,6 +6,9 @@ on:
     - cron:  '0 9 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   canary-test:
     runs-on: ${{ matrix.os }}
